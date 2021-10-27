@@ -1,4 +1,4 @@
-const { Hotel } = require('../models');
+const { Hotel, Room, BookedRoom } = require('../models');
 const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
@@ -45,5 +45,61 @@ exports.getHotels = async () => {
     };
   } catch (err) {
     throw new AppError('Failed to get all hotels', 500);
+  }
+};
+
+exports.getHotel = async (hotelID) => {
+  try {
+    const hotel = await Hotel.findAll({
+      where: {
+        id: hotelID,
+      },
+      paranoid: false,
+    });
+
+    return {
+      status: 'success',
+      data: hotel,
+    };
+  } catch (err) {
+    throw new AppError(
+      'Failed to get the hotel details and its free rooms',
+      500
+    );
+  }
+};
+
+exports.getHotelFreeRooms = async (hotelID) => {
+  try {
+    const hotelRooms = await Room.findAll({
+      where: {
+        hotel_id: hotelID,
+      },
+    });
+    const hotelRoomsIDs = hotelRooms.map((room) => room.id);
+    const hotelBookedRooms = await BookedRoom.findAll({
+      where: {
+        room_id: hotelRoomsIDs,
+      },
+    });
+    const hotelBookedRoomsIDs = hotelBookedRooms.map((room) => room.room_id);
+    const freeRoomsIDs = hotelRoomsIDs.filter(
+      (roomID) => !hotelBookedRoomsIDs.includes(roomID)
+    );
+    const freeRooms = await Room.findAll({
+      where: {
+        id: freeRoomsIDs,
+      },
+    });
+
+    return {
+      status: 'success',
+      data: freeRooms,
+    };
+  } catch (err) {
+    throw new AppError(
+      'Failed to get the hotel details and its free rooms',
+      500
+    );
   }
 };
