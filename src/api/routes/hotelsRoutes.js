@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.route('/').get(controller.getHotels).post(controller.addHotel);
 
-router.route('/:id').delete(controller.deleteHotel);
+router.route('/:id').get(controller.getHotel).delete(controller.deleteHotel);
 
 module.exports = router;

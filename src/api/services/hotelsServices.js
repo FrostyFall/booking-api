@@ -47,3 +47,24 @@ exports.getHotels = async () => {
     throw new AppError('Failed to get all hotels', 500);
   }
 };
+
+exports.getHotel = async (hotelID) => {
+  try {
+    const hotel = await Hotel.findAll({
+      where: {
+        id: hotelID,
+      },
+      paranoid: false,
+    });
+
+    return {
+      status: 'success',
+      data: hotel,
+    };
+  } catch (err) {
+    throw new AppError(
+      'Failed to get the hotel details and its free rooms',
+      500
+    );
+  }
+};
