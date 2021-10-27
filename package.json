@@ -1,0 +1,36 @@
+{
+  "name": "booking-api",
+  "version": "1.0.0",
+  "description": "Booking API for iTechArt Node.js Course",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "start:dev": "nodemon ./src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrostyFall/iTechArt-nodejs-booking-api.git"
+  },
+  "author": "Artem Yakovlev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FrostyFall/iTechArt-nodejs-booking-api/issues"
+  },
+  "homepage": "https://github.com/FrostyFall/iTechArt-nodejs-booking-api#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.3.2",
+    "sequelize": "^6.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.13",
+    "prettier": "^2.4.1"
+  }
+}
