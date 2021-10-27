@@ -17,3 +17,20 @@ exports.addHotel = async (img, title, description) => {
     throw new AppError('Failed to add a hotel', 500);
   }
 };
+
+exports.deleteHotel = async (hotelID) => {
+  try {
+    await Hotel.destroy({
+      where: {
+        id: hotelID,
+      },
+    });
+
+    return {
+      status: 'success',
+      message: 'Hotel has been deleted successfully',
+    };
+  } catch (err) {
+    throw new AppError('Failed to delete a hotel', 500);
+  }
+};
