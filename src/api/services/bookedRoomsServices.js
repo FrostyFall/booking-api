@@ -18,3 +18,20 @@ exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
     throw new AppError('Failed to book a room', 500);
   }
 };
+
+exports.cancelBooking = async (bookingID) => {
+  try {
+    await BookedRoom.destroy({
+      where: {
+        id: bookingID,
+      },
+    });
+
+    return {
+      status: 'success',
+      message: 'Booking has been cancelled successfully',
+    };
+  } catch (err) {
+    throw new AppError('Failed to book a room', 500);
+  }
+};

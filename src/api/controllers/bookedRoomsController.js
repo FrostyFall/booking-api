@@ -16,3 +16,15 @@ exports.bookRoom = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.cancelBooking = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const cancelledBookingRes = await BookedRoomsServices.cancelBooking(id);
+
+    res.status(201).json(cancelledBookingRes);
+  } catch (err) {
+    next(err);
+  }
+};
