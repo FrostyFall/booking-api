@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const db = require('./config/DBConnection');
 const AppError = require('./config/appError');
 const globalErrorHandler = require('./api/middlewares/globalErrorHandler');
 
@@ -14,4 +15,6 @@ app.use((req, res, next) => {
 
 app.use(globalErrorHandler);
 
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+db.sync().then(() => {
+  app.listen(port, () => console.log(`Listening on port ${port}...`));
+});
