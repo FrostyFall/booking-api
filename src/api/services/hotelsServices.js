@@ -1,4 +1,4 @@
-const { Hotel, Room, BookedRoom } = require('../models');
+const { Hotel, Room, BookedRoom, HotelReview } = require('../models');
 const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
@@ -101,5 +101,23 @@ exports.getHotelFreeRooms = async (hotelID) => {
       'Failed to get the hotel details and its free rooms',
       500
     );
+  }
+};
+
+exports.addReview = async (hotelID, userID, review, stars) => {
+  try {
+    await HotelReview.create({
+      hotel_id: hotelID,
+      user_id: userID,
+      review,
+      stars,
+    });
+
+    return {
+      status: 'success',
+      message: 'Review has been added successfully',
+    };
+  } catch (err) {
+    throw new AppError('Failed to add a hotel review', 500);
   }
 };

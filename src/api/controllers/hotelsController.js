@@ -59,3 +59,21 @@ exports.getHotelFreeRooms = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.addReview = async (req, res, next) => {
+  try {
+    const { id: hotelID } = req.params;
+    const { userID, review, stars } = req.body;
+
+    const addReviewRes = await HotelsServices.addReview(
+      hotelID,
+      userID,
+      review,
+      stars
+    );
+
+    res.status(201).json(addReviewRes);
+  } catch (err) {
+    next(err);
+  }
+};

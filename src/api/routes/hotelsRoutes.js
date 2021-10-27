@@ -9,4 +9,6 @@ router.route('/:id').get(controller.getHotel).delete(controller.deleteHotel);
 
 router.get('/:id/free-rooms', controller.getHotelFreeRooms);
 
+router.route('/:id/reviews').post(controller.addReview);
+
 module.exports = router;
