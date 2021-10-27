@@ -27,3 +27,13 @@ exports.deleteHotel = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getHotels = async (req, res, next) => {
+  try {
+    const fetchedHotels = await HotelsServices.getHotels();
+
+    res.status(200).json(fetchedHotels);
+  } catch (err) {
+    next(err);
+  }
+};
