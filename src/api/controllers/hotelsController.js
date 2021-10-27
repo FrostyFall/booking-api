@@ -48,3 +48,14 @@ exports.getHotel = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getHotelFreeRooms = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const fetchedFreeRooms = await HotelsServices.getHotelFreeRooms(id);
+
+    res.status(200).json(fetchedFreeRooms);
+  } catch (err) {
+    next(err);
+  }
+};
