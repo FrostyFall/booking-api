@@ -77,3 +77,14 @@ exports.addReview = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getReviews = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const fetchedReviews = await HotelsServices.getReviews(id);
+
+    res.status(200).json(fetchedReviews);
+  } catch (err) {
+    next(err);
+  }
+};

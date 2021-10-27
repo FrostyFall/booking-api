@@ -121,3 +121,20 @@ exports.addReview = async (hotelID, userID, review, stars) => {
     throw new AppError('Failed to add a hotel review', 500);
   }
 };
+
+exports.getReviews = async (hotelID) => {
+  try {
+    const reviews = await HotelReview.findAll({
+      where: {
+        hotel_id: hotelID,
+      },
+    });
+
+    return {
+      status: 'success',
+      data: reviews,
+    };
+  } catch (err) {
+    throw new AppError('Failed to get the hotel reviews', 500);
+  }
+};
