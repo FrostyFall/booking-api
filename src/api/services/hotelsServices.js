@@ -34,3 +34,16 @@ exports.deleteHotel = async (hotelID) => {
     throw new AppError('Failed to delete a hotel', 500);
   }
 };
+
+exports.getHotels = async () => {
+  try {
+    const hotels = await Hotel.findAll({ paranoid: false });
+
+    return {
+      status: 'success',
+      data: hotels,
+    };
+  } catch (err) {
+    throw new AppError('Failed to get all hotels', 500);
+  }
+};
