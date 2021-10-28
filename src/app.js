@@ -3,6 +3,7 @@ const express = require('express');
 const hotelsRouter = require('./api/routes/hotelsRoutes');
 const roomsRouter = require('./api/routes/roomsRoutes');
 const bookedRoomsRouter = require('./api/routes/bookedRoomsRoutes');
+const usersRouter = require('./api/routes/usersRoutes');
 const db = require('./config/DBConnection');
 const AppError = require('./config/appError');
 const globalErrorHandler = require('./api/middlewares/globalErrorHandler');
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/hotels', hotelsRouter);
 app.use('/rooms', roomsRouter);
 app.use('/booked-rooms', bookedRoomsRouter);
+app.use('/users', usersRouter);
 
 app.use((req, res, next) => {
   next(new AppError('Page Not Found', 404));

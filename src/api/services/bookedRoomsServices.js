@@ -55,7 +55,7 @@ exports.getUserBookings = async (userID) => {
 
 exports.getBookings = async () => {
   try {
-    const bookings = await BookedRoom.findAll({});
+    const bookings = await BookedRoom.findAll();
 
     return {
       status: 'success',
