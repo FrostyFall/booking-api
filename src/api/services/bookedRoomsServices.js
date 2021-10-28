@@ -52,3 +52,16 @@ exports.getUserBookings = async (userID) => {
     throw new AppError('Failed to book a room', 500);
   }
 };
+
+exports.getBookings = async () => {
+  try {
+    const bookings = await BookedRoom.findAll({});
+
+    return {
+      status: 'success',
+      data: bookings,
+    };
+  } catch (err) {
+    throw new AppError('Failed to book a room', 500);
+  }
+};
