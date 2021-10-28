@@ -35,3 +35,20 @@ exports.cancelBooking = async (bookingID) => {
     throw new AppError('Failed to book a room', 500);
   }
 };
+
+exports.getUserBookings = async (userID) => {
+  try {
+    const bookings = await BookedRoom.findAll({
+      where: {
+        user_id: userID,
+      },
+    });
+
+    return {
+      status: 'success',
+      data: bookings,
+    };
+  } catch (err) {
+    throw new AppError('Failed to book a room', 500);
+  }
+};

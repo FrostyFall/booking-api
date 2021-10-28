@@ -28,3 +28,15 @@ exports.cancelBooking = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getUserBookings = async (req, res, next) => {
+  try {
+    const { userID } = req.query;
+
+    const fetchedBookings = await BookedRoomsServices.getUserBookings(userID);
+
+    res.status(200).json(fetchedBookings);
+  } catch (err) {
+    next(err);
+  }
+};
