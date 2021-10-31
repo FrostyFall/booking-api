@@ -1,10 +1,11 @@
-const { Room, BookedRoom, HotelReview } = require('../models');
-const repository = require('../repositories/hotelsRepository');
+const { BookedRoom, HotelReview } = require('../models');
+const HotelsRepo = require('../repositories/hotelsRepository');
+const RoomsRepo = require('../repositories/roomsRepository');
 const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
   try {
-    await repository.createOne({
+    await HotelsRepo.createOne({
       img,
       title,
       description,
@@ -21,7 +22,7 @@ exports.addHotel = async (img, title, description) => {
 
 exports.deleteHotel = async (hotelID) => {
   try {
-    await repository.deleteOne(hotelID);
+    await HotelsRepo.deleteOne(hotelID);
 
     return {
       status: 'success',
@@ -34,7 +35,7 @@ exports.deleteHotel = async (hotelID) => {
 
 exports.getHotels = async () => {
   try {
-    const hotels = await repository.findAll();
+    const hotels = await HotelsRepo.findAll();
 
     return {
       status: 'success',
@@ -47,7 +48,7 @@ exports.getHotels = async () => {
 
 exports.getHotel = async (hotelID) => {
   try {
-    const hotel = await repository.findById(hotelID);
+    const hotel = await HotelsRepo.findById(hotelID);
 
     return {
       status: 'success',
@@ -63,11 +64,7 @@ exports.getHotel = async (hotelID) => {
 
 exports.getHotelFreeRooms = async (hotelID) => {
   try {
-    const hotelRooms = await Room.findAll({
-      where: {
-        hotel_id: hotelID,
-      },
-    });
+    const hotelRooms = await RoomsRepo.findByHotelId(hotelID);
     const hotelRoomsIDs = hotelRooms.map((room) => room.id);
     const hotelBookedRooms = await BookedRoom.findAll({
       where: {
@@ -78,11 +75,7 @@ exports.getHotelFreeRooms = async (hotelID) => {
     const freeRoomsIDs = hotelRoomsIDs.filter(
       (roomID) => !hotelBookedRoomsIDs.includes(roomID)
     );
-    const freeRooms = await Room.findAll({
-      where: {
-        id: freeRoomsIDs,
-      },
-    });
+    const freeRooms = await RoomsRepo.findById(freeRoomsIDs);
 
     return {
       status: 'success',
