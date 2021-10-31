@@ -3,7 +3,7 @@ const AppError = require('../../config/appError');
 
 exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
   try {
-    await BookedRoomsRepo.createOne({ roomID, userID, bookedDate, leaveDate });
+    await BookedRoomsRepo.createOne(roomID, userID, bookedDate, leaveDate);
 
     return {
       status: 'success',

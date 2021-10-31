@@ -6,11 +6,7 @@ const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
   try {
-    await HotelsRepo.createOne({
-      img,
-      title,
-      description,
-    });
+    await HotelsRepo.createOne(img, title, description);
 
     return {
       status: 'success',
@@ -88,7 +84,7 @@ exports.getHotelFreeRooms = async (hotelID) => {
 
 exports.addReview = async (hotelID, userID, review, stars) => {
   try {
-    await HotelReviewsRepo.createOne({ hotelID, userID, review, stars });
+    await HotelReviewsRepo.createOne(hotelID, userID, review, stars);
 
     return {
       status: 'success',

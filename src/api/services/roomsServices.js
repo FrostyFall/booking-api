@@ -1,9 +1,9 @@
-const { Room } = require('../models');
+const RoomsRepo = require('../repositories/roomsRepository');
 const AppError = require('../../config/appError');
 
 exports.addRoom = async (hotelID, img, type, cost) => {
   try {
-    await Room.create({ hotel_id: hotelID, img, type, cost });
+    await RoomsRepo.createOne(hotelID, img, type, cost);
 
     return {
       status: 'success',

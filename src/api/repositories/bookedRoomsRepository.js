@@ -26,7 +26,7 @@ exports.findAll = async () => {
   return result;
 };
 
-exports.createOne = async ({ roomID, userID, bookedDate, leaveDate }) => {
+exports.createOne = async (roomID, userID, bookedDate, leaveDate) => {
   const result = await BookedRoom.create({
     room_id: roomID,
     user_id: userID,

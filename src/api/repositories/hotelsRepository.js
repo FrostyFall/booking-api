@@ -1,6 +1,6 @@
 const { Hotel } = require('../models');
 
-exports.createOne = async ({ img, title, description }) => {
+exports.createOne = async (img, title, description) => {
   const result = await Hotel.create({
     img,
     title,
