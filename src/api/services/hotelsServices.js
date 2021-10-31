@@ -1,9 +1,10 @@
-const { Hotel, Room, BookedRoom, HotelReview } = require('../models');
+const { Room, BookedRoom, HotelReview } = require('../models');
+const repository = require('../repositories/hotelsRepository');
 const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
   try {
-    await Hotel.create({
+    await repository.createOne({
       img,
       title,
       description,
@@ -20,11 +21,7 @@ exports.addHotel = async (img, title, description) => {
 
 exports.deleteHotel = async (hotelID) => {
   try {
-    await Hotel.destroy({
-      where: {
-        id: hotelID,
-      },
-    });
+    await repository.deleteOne(hotelID);
 
     return {
       status: 'success',
@@ -37,7 +34,7 @@ exports.deleteHotel = async (hotelID) => {
 
 exports.getHotels = async () => {
   try {
-    const hotels = await Hotel.findAll({ paranoid: false });
+    const hotels = await repository.findAll();
 
     return {
       status: 'success',
@@ -50,12 +47,7 @@ exports.getHotels = async () => {
 
 exports.getHotel = async (hotelID) => {
   try {
-    const hotel = await Hotel.findAll({
-      where: {
-        id: hotelID,
-      },
-      paranoid: false,
-    });
+    const hotel = await repository.findById(hotelID);
 
     return {
       status: 'success',
