@@ -1,7 +1,7 @@
-const { BookedRoom, HotelReview } = require('../models');
 const HotelsRepo = require('../repositories/hotelsRepository');
 const RoomsRepo = require('../repositories/roomsRepository');
 const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
+const HotelReviewsRepo = require('../repositories/hotelReviewsRepository');
 const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
@@ -88,12 +88,7 @@ exports.getHotelFreeRooms = async (hotelID) => {
 
 exports.addReview = async (hotelID, userID, review, stars) => {
   try {
-    await HotelReview.create({
-      hotel_id: hotelID,
-      user_id: userID,
-      review,
-      stars,
-    });
+    await HotelReviewsRepo.createOne({ hotelID, userID, review, stars });
 
     return {
       status: 'success',
@@ -106,11 +101,7 @@ exports.addReview = async (hotelID, userID, review, stars) => {
 
 exports.getReviews = async (hotelID) => {
   try {
-    const reviews = await HotelReview.findAll({
-      where: {
-        hotel_id: hotelID,
-      },
-    });
+    const reviews = await HotelReviewsRepo.findByHotelId(hotelID);
 
     return {
       status: 'success',
