@@ -1,13 +1,12 @@
-const { Hotel, Room, BookedRoom, HotelReview } = require('../models');
+const HotelsRepo = require('../repositories/hotelsRepository');
+const RoomsRepo = require('../repositories/roomsRepository');
+const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
+const HotelReviewsRepo = require('../repositories/hotelReviewsRepository');
 const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
   try {
-    await Hotel.create({
-      img,
-      title,
-      description,
-    });
+    await HotelsRepo.createOne(img, title, description);
 
     return {
       status: 'success',
@@ -20,11 +19,7 @@ exports.addHotel = async (img, title, description) => {
 
 exports.deleteHotel = async (hotelID) => {
   try {
-    await Hotel.destroy({
-      where: {
-        id: hotelID,
-      },
-    });
+    await HotelsRepo.deleteById(hotelID);
 
     return {
       status: 'success',
@@ -37,7 +32,7 @@ exports.deleteHotel = async (hotelID) => {
 
 exports.getHotels = async () => {
   try {
-    const hotels = await Hotel.findAll({ paranoid: false });
+    const hotels = await HotelsRepo.findAll();
 
     return {
       status: 'success',
@@ -50,12 +45,7 @@ exports.getHotels = async () => {
 
 exports.getHotel = async (hotelID) => {
   try {
-    const hotel = await Hotel.findAll({
-      where: {
-        id: hotelID,
-      },
-      paranoid: false,
-    });
+    const hotel = await HotelsRepo.findById(hotelID);
 
     return {
       status: 'success',
@@ -71,26 +61,14 @@ exports.getHotel = async (hotelID) => {
 
 exports.getHotelFreeRooms = async (hotelID) => {
   try {
-    const hotelRooms = await Room.findAll({
-      where: {
-        hotel_id: hotelID,
-      },
-    });
+    const hotelRooms = await RoomsRepo.findByHotelId(hotelID);
     const hotelRoomsIDs = hotelRooms.map((room) => room.id);
-    const hotelBookedRooms = await BookedRoom.findAll({
-      where: {
-        room_id: hotelRoomsIDs,
-      },
-    });
+    const hotelBookedRooms = await BookedRoomsRepo.findByRoomId(hotelRoomsIDs);
     const hotelBookedRoomsIDs = hotelBookedRooms.map((room) => room.room_id);
     const freeRoomsIDs = hotelRoomsIDs.filter(
       (roomID) => !hotelBookedRoomsIDs.includes(roomID)
     );
-    const freeRooms = await Room.findAll({
-      where: {
-        id: freeRoomsIDs,
-      },
-    });
+    const freeRooms = await RoomsRepo.findById(freeRoomsIDs);
 
     return {
       status: 'success',
@@ -106,12 +84,7 @@ exports.getHotelFreeRooms = async (hotelID) => {
 
 exports.addReview = async (hotelID, userID, review, stars) => {
   try {
-    await HotelReview.create({
-      hotel_id: hotelID,
-      user_id: userID,
-      review,
-      stars,
-    });
+    await HotelReviewsRepo.createOne(hotelID, userID, review, stars);
 
     return {
       status: 'success',
@@ -124,11 +97,7 @@ exports.addReview = async (hotelID, userID, review, stars) => {
 
 exports.getReviews = async (hotelID) => {
   try {
-    const reviews = await HotelReview.findAll({
-      where: {
-        hotel_id: hotelID,
-      },
-    });
+    const reviews = await HotelReviewsRepo.findByHotelId(hotelID);
 
     return {
       status: 'success',

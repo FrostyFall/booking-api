@@ -1,14 +1,9 @@
-const { BookedRoom } = require('../models');
+const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
 const AppError = require('../../config/appError');
 
 exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
   try {
-    await BookedRoom.create({
-      room_id: roomID,
-      user_id: userID,
-      booked_date: bookedDate,
-      leave_date: leaveDate,
-    });
+    await BookedRoomsRepo.createOne(roomID, userID, bookedDate, leaveDate);
 
     return {
       status: 'success',
@@ -21,11 +16,7 @@ exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
 
 exports.cancelBooking = async (bookingID) => {
   try {
-    await BookedRoom.destroy({
-      where: {
-        id: bookingID,
-      },
-    });
+    await BookedRoomsRepo.deleteById(bookingID);
 
     return {
       status: 'success',
@@ -38,11 +29,7 @@ exports.cancelBooking = async (bookingID) => {
 
 exports.getUserBookings = async (userID) => {
   try {
-    const bookings = await BookedRoom.findAll({
-      where: {
-        user_id: userID,
-      },
-    });
+    const bookings = await BookedRoomsRepo.findByUserId(userID);
 
     return {
       status: 'success',
@@ -55,7 +42,7 @@ exports.getUserBookings = async (userID) => {
 
 exports.getBookings = async () => {
   try {
-    const bookings = await BookedRoom.findAll();
+    const bookings = await BookedRoomsRepo.findAll();
 
     return {
       status: 'success',
