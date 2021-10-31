@@ -1,6 +1,7 @@
 const { BookedRoom, HotelReview } = require('../models');
 const HotelsRepo = require('../repositories/hotelsRepository');
 const RoomsRepo = require('../repositories/roomsRepository');
+const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
 const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
@@ -66,11 +67,7 @@ exports.getHotelFreeRooms = async (hotelID) => {
   try {
     const hotelRooms = await RoomsRepo.findByHotelId(hotelID);
     const hotelRoomsIDs = hotelRooms.map((room) => room.id);
-    const hotelBookedRooms = await BookedRoom.findAll({
-      where: {
-        room_id: hotelRoomsIDs,
-      },
-    });
+    const hotelBookedRooms = await BookedRoomsRepo.findByRoomId(hotelRoomsIDs);
     const hotelBookedRoomsIDs = hotelBookedRooms.map((room) => room.room_id);
     const freeRoomsIDs = hotelRoomsIDs.filter(
       (roomID) => !hotelBookedRoomsIDs.includes(roomID)
