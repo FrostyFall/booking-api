@@ -10,7 +10,7 @@ exports.createOne = async (img, title, description) => {
   return result;
 };
 
-exports.deleteOne = async (id) => {
+exports.deleteById = async (id) => {
   const result = await Hotel.destroy({
     where: {
       id,

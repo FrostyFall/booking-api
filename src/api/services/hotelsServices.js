@@ -19,7 +19,7 @@ exports.addHotel = async (img, title, description) => {
 
 exports.deleteHotel = async (hotelID) => {
   try {
-    await HotelsRepo.deleteOne(hotelID);
+    await HotelsRepo.deleteById(hotelID);
 
     return {
       status: 'success',

@@ -1,9 +1,9 @@
-const { User } = require('../models');
+const UsersRepo = require('../repositories/usersRepository');
 const AppError = require('../../config/appError');
 
 exports.getUsers = async () => {
   try {
-    const users = await User.findAll();
+    const users = await UsersRepo.findAll();
 
     return {
       status: 'success',
