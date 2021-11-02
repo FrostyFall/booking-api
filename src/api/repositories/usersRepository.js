@@ -13,7 +13,7 @@ exports.findByEmail = async (email) => {
     },
   });
 
-  return result;
+  return result[0];
 };
 
 exports.createOne = async (email, password, firstName, lastName) => {

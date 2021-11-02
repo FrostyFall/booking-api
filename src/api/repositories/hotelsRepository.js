@@ -34,5 +34,5 @@ exports.findById = async (id) => {
     paranoid: false,
   });
 
-  return result;
+  return result[0];
 };
