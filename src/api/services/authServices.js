@@ -28,3 +28,25 @@ exports.signup = async (email, password, firstName, lastName) => {
     throw new AppError('Failed to signup user', 500);
   }
 };
+
+exports.login = async (email, password) => {
+  try {
+    const user = await UsersRepo.findByEmail(email);
+    const hashedPassword = user[0].dataValues.password;
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+
+    if (!isMatch) {
+      return {
+        status: 'fail',
+        message: 'Invalid email or password',
+      };
+    }
+
+    return {
+      status: 'success',
+      message: 'User has been logged in',
+    };
+  } catch (err) {
+    throw new AppError('Failed to login user', 500);
+  }
+};
