@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const authRouter = require('./api/routes/authRoutes');
 const hotelsRouter = require('./api/routes/hotelsRoutes');
 const roomsRouter = require('./api/routes/roomsRoutes');
 const bookedRoomsRouter = require('./api/routes/bookedRoomsRoutes');
@@ -13,6 +14,7 @@ const port = process.env.PORT ?? 3000;
 
 app.use(express.json());
 
+app.use('/', authRouter);
 app.use('/hotels', hotelsRouter);
 app.use('/rooms', roomsRouter);
 app.use('/booked-rooms', bookedRoomsRouter);
