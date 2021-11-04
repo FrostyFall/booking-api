@@ -10,22 +10,32 @@ const hashPass = async (password) => {
   return hash;
 };
 
+const isValidPassword = async (password, hashedPassword) => {
+  const isValid = await bcrypt.compare(password, hashedPassword);
+
+  return isValid;
+};
+
 const signToken = async (userId) => {
+  const secsSinceUnixEpoch = Math.floor(Date.now() / 1000);
+  const expiresIn = parseInt(process.env.JWT_EXPIRES_IN, 10);
+
   const payload = {
     sub: userId,
-    iat: Date.now(),
-  };
-  const options = {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+    iat: secsSinceUnixEpoch,
+    exp: secsSinceUnixEpoch + expiresIn,
   };
 
   return new Promise((resolve, reject) => {
-    jwt.sign(payload, process.env.JWT_SECRET, options, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, (err, token) => {
       if (err) {
         reject(new AppError('Failed to create a token', 500));
       }
 
-      resolve(token);
+      resolve({
+        str: 'Bearer ' + token,
+        expiresIn,
+      });
     });
   });
 };
@@ -56,17 +66,14 @@ exports.signup = async (email, password, firstName, lastName) => {
 exports.login = async (email, password) => {
   try {
     const user = await UsersRepo.findByEmail(email);
-    const hashedPassword = user.dataValues.password;
-    const isMatch = await bcrypt.compare(password, hashedPassword);
+    const { password: hashedPassword, id: userId } = user.dataValues;
+    const isValid = await isValidPassword(password, hashedPassword);
 
-    if (!isMatch) {
-      return {
-        status: 'fail',
-        message: 'Invalid email or password',
-      };
+    if (!isValid) {
+      throw new AppError('Invalid email or password', 500);
     }
 
-    const token = await signToken(user.dataValues.id);
+    const token = await signToken(userId);
 
     return {
       status: 'success',
@@ -74,6 +81,6 @@ exports.login = async (email, password) => {
       token,
     };
   } catch (err) {
-    throw new AppError('Failed to login user', 500);
+    throw new AppError(err.message, 500);
   }
 };

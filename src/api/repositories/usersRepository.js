@@ -6,6 +6,16 @@ exports.findAll = async () => {
   return result;
 };
 
+exports.findById = async (id) => {
+  const result = await User.findAll({
+    where: {
+      id,
+    },
+  });
+
+  return result[0];
+};
+
 exports.findByEmail = async (email) => {
   const result = await User.findAll({
     where: {
