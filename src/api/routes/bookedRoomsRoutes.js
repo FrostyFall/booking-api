@@ -3,7 +3,7 @@ const controller = require('../controllers/bookedRoomsController');
 
 const router = express.Router();
 
-router.route('/').post(controller.bookRoom);
+router.route('/').get(controller.getBookings).post(controller.bookRoom);
 
 router.route('/:id').delete(controller.cancelBooking);
 

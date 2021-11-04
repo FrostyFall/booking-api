@@ -1,14 +1,9 @@
-const { BookedRoom } = require('../models');
+const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
 const AppError = require('../../config/appError');
 
 exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
   try {
-    await BookedRoom.create({
-      room_id: roomID,
-      user_id: userID,
-      booked_date: bookedDate,
-      leave_date: leaveDate,
-    });
+    await BookedRoomsRepo.createOne(roomID, userID, bookedDate, leaveDate);
 
     return {
       status: 'success',
@@ -21,15 +16,37 @@ exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
 
 exports.cancelBooking = async (bookingID) => {
   try {
-    await BookedRoom.destroy({
-      where: {
-        id: bookingID,
-      },
-    });
+    await BookedRoomsRepo.deleteById(bookingID);
 
     return {
       status: 'success',
       message: 'Booking has been cancelled successfully',
+    };
+  } catch (err) {
+    throw new AppError('Failed to book a room', 500);
+  }
+};
+
+exports.getUserBookings = async (userID) => {
+  try {
+    const bookings = await BookedRoomsRepo.findByUserId(userID);
+
+    return {
+      status: 'success',
+      data: bookings,
+    };
+  } catch (err) {
+    throw new AppError('Failed to book a room', 500);
+  }
+};
+
+exports.getBookings = async () => {
+  try {
+    const bookings = await BookedRoomsRepo.findAll();
+
+    return {
+      status: 'success',
+      data: bookings,
     };
   } catch (err) {
     throw new AppError('Failed to book a room', 500);
