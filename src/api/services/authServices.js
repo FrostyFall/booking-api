@@ -1,48 +1,14 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const UsersRepo = require('../repositories/usersRepository');
 const AppError = require('../../config/appError');
-
-const hashPass = async (password) => {
-  const salt = await bcrypt.genSalt(12);
-  const hash = await bcrypt.hash(password, salt);
-
-  return hash;
-};
-
-const isValidPassword = async (password, hashedPassword) => {
-  const isValid = await bcrypt.compare(password, hashedPassword);
-
-  return isValid;
-};
-
-const signToken = async (userId) => {
-  const secsSinceUnixEpoch = Math.floor(Date.now() / 1000);
-  const expiresIn = parseInt(process.env.JWT_EXPIRES_IN, 10);
-
-  const payload = {
-    sub: userId,
-    iat: secsSinceUnixEpoch,
-    exp: secsSinceUnixEpoch + expiresIn,
-  };
-
-  return new Promise((resolve, reject) => {
-    jwt.sign(payload, process.env.JWT_SECRET, (err, token) => {
-      if (err) {
-        reject(new AppError('Failed to create a token', 500));
-      }
-
-      resolve({
-        str: 'Bearer ' + token,
-        expiresIn,
-      });
-    });
-  });
-};
+const {
+  hashPassword,
+  isValidPassword,
+  signToken,
+} = require('../../utils/auth');
 
 exports.signup = async (email, password, firstName, lastName) => {
   try {
-    const hashedPass = await hashPass(password);
+    const hashedPass = await hashPassword(password);
 
     const result = await UsersRepo.createOne(
       email,
