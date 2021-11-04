@@ -42,3 +42,13 @@ exports.createOne = async (email, password, firstName, lastName) => {
     userInfo,
   };
 };
+
+exports.deleteById = async (id) => {
+  const deletedUser = await User.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return deletedUser;
+};
