@@ -38,12 +38,12 @@ exports.getBookings = async (req, res, next) => {
         userID
       );
 
-      res.status(200).json(fetchedUserBookings);
-    } else {
-      const fetchedBookings = await BookedRoomsServices.getBookings();
-
-      res.status(200).json(fetchedBookings);
+      return res.status(200).json(fetchedUserBookings);
     }
+
+    const fetchedBookings = await BookedRoomsServices.getBookings();
+
+    res.status(200).json(fetchedBookings);
   } catch (err) {
     next(err);
   }
