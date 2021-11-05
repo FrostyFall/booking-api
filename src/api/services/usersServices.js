@@ -13,3 +13,16 @@ exports.getUsers = async () => {
     throw new AppError('Failed to get users', 500);
   }
 };
+
+exports.deleteUser = async (userId) => {
+  try {
+    await UsersRepo.deleteById(userId);
+
+    return {
+      status: 'success',
+      message: 'User has been deleted',
+    };
+  } catch (err) {
+    throw new AppError('Failed to delete user', 500);
+  }
+};

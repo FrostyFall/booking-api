@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const passport = require('./config/passport');
-const db = require('./config/DBConnection');
+const db = require('./config/dbConnection');
 const AppError = require('./config/appError');
 const globalErrorHandler = require('./api/middlewares/globalErrorHandler');
 const passportAuth = require('./api/middlewares/passportAuth');

@@ -11,6 +11,8 @@ module.exports = (req, res, next) => {
       return next(new AppError(info.message, 500));
     }
 
-    return next();
+    req.user = user.dataValues;
+
+    next();
   })(req, res, next);
 };

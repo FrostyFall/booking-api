@@ -29,21 +29,11 @@ exports.cancelBooking = async (req, res, next) => {
   }
 };
 
-exports.getBookings = async (req, res, next) => {
+exports.getAllBookings = async (req, res, next) => {
   try {
-    const { userID } = req.query;
+    const fetchedBookings = await BookedRoomsServices.getBookings();
 
-    if (userID) {
-      const fetchedUserBookings = await BookedRoomsServices.getUserBookings(
-        userID
-      );
-
-      res.status(200).json(fetchedUserBookings);
-    } else {
-      const fetchedBookings = await BookedRoomsServices.getBookings();
-
-      res.status(200).json(fetchedBookings);
-    }
+    res.status(200).json(fetchedBookings);
   } catch (err) {
     next(err);
   }

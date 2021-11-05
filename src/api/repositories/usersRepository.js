@@ -1,4 +1,4 @@
-const { User, UserInfo } = require('../models');
+const { User, UserInfo, UsersRoles } = require('../models');
 
 exports.findAll = async () => {
   const result = await User.findAll();
@@ -26,7 +26,7 @@ exports.findByEmail = async (email) => {
   return result[0];
 };
 
-exports.createOne = async (email, password, firstName, lastName) => {
+exports.createOne = async (email, password, firstName, lastName, roleID) => {
   const user = await User.create({
     email,
     password,
@@ -36,9 +36,24 @@ exports.createOne = async (email, password, firstName, lastName) => {
     first_name: firstName,
     last_name: lastName,
   });
+  const usersRoles = await UsersRoles.create({
+    user_id: user.id,
+    role_id: roleID,
+  });
 
   return {
     user,
     userInfo,
+    usersRoles,
   };
+};
+
+exports.deleteById = async (id) => {
+  const deletedUser = await User.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return deletedUser;
 };
