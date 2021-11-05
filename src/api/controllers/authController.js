@@ -2,13 +2,14 @@ const AuthServices = require('../services/authServices');
 
 exports.signup = async (req, res, next) => {
   try {
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName, roleID = 1 } = req.body;
 
     const result = await AuthServices.signup(
       email,
       password,
       firstName,
-      lastName
+      lastName,
+      roleID
     );
 
     res.status(201).json(result);

@@ -6,7 +6,7 @@ const {
   signToken,
 } = require('../../utils/auth');
 
-exports.signup = async (email, password, firstName, lastName) => {
+exports.signup = async (email, password, firstName, lastName, roleID) => {
   try {
     const hashedPass = await hashPassword(password);
 
@@ -14,7 +14,8 @@ exports.signup = async (email, password, firstName, lastName) => {
       email,
       hashedPass,
       firstName,
-      lastName
+      lastName,
+      roleID
     );
 
     const token = await signToken(result.user.dataValues.id);
@@ -32,13 +33,12 @@ exports.signup = async (email, password, firstName, lastName) => {
 exports.login = async (email, password) => {
   try {
     const user = await UsersRepo.findByEmail(email);
-    const { password: hashedPassword, id: userId } = user.dataValues;
-    const isValid = await isValidPassword(password, hashedPassword);
 
-    if (!isValid) {
-      throw new AppError('Invalid email or password', 500);
+    if (!user || !(await isValidPassword(password, user.dataValues.password))) {
+      throw new AppError('Invalid email or password', 400);
     }
 
+    const userId = user.dataValues.id;
     const token = await signToken(userId);
 
     return {
