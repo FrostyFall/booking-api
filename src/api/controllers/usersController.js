@@ -34,9 +34,8 @@ exports.deleteSelf = async (req, res, next) => {
 exports.getUserBookings = async (req, res, next) => {
   try {
     const userID = parseInt(req.params.id, 10);
-    const authUserID = req.user.id;
 
-    if (userID !== authUserID) {
+    if (req.user.role === 'user' && userID !== req.user.id) {
       return next(
         new AppError(
           "You have no permission to get this user's booked rooms",
