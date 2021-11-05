@@ -6,9 +6,11 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(controller.getBookings)
-  .post(authorize('user'), controller.bookRoom);
+  .get(authorize('admin'), controller.getAllBookings)
+  .post(authorize('admin', 'user'), controller.bookRoom);
 
-router.route('/:id').delete(authorize('user'), controller.cancelBooking);
+router
+  .route('/:id')
+  .delete(authorize('admin', 'user'), controller.cancelBooking);
 
 module.exports = router;

@@ -13,6 +13,8 @@ module.exports = (...roles) => {
       );
     }
 
+    req.user.role = userRole.role;
+
     next();
   };
 };

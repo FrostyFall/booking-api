@@ -29,18 +29,8 @@ exports.cancelBooking = async (req, res, next) => {
   }
 };
 
-exports.getBookings = async (req, res, next) => {
+exports.getAllBookings = async (req, res, next) => {
   try {
-    const { userID } = req.query;
-
-    if (userID) {
-      const fetchedUserBookings = await BookedRoomsServices.getUserBookings(
-        userID
-      );
-
-      return res.status(200).json(fetchedUserBookings);
-    }
-
     const fetchedBookings = await BookedRoomsServices.getBookings();
 
     res.status(200).json(fetchedBookings);
