@@ -2,7 +2,7 @@ const HotelsRepo = require('../repositories/hotelsRepository');
 const RoomsRepo = require('../repositories/roomsRepository');
 const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
 const HotelReviewsRepo = require('../repositories/hotelReviewsRepository');
-const AppError = require('../../config/appError');
+const AppError = require('../../utils/appError');
 
 exports.addHotel = async (img, title, description) => {
   try {

@@ -1,5 +1,5 @@
 const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
-const AppError = require('../../config/appError');
+const AppError = require('../../utils/appError');
 
 exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
   try {

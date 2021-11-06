@@ -4,7 +4,8 @@ function AppError(message, statusCode) {
   this.statusCode = statusCode;
   this.isOperational = true;
 
-  Error.captureStackTrace(this, this.constructor);
+  Error.stackTraceLimit = 8;
+  Error.captureStackTrace(this);
 }
 
 AppError.prototype = Object.create(Error.prototype);

@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const AppError = require('../config/appError');
+const AppError = require('./appError');
 
 exports.hashPassword = async (password) => {
   const salt = await bcrypt.genSalt(12);

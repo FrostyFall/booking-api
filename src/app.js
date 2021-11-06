@@ -2,9 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const passport = require('./config/passport');
 const db = require('./config/dbConnection');
-const AppError = require('./config/appError');
-const globalErrorHandler = require('./api/middlewares/globalErrorHandler');
+const AppError = require('./utils/appError');
+const globalErrorController = require('./api/controllers/globalErrorController');
 const passportAuth = require('./api/middlewares/passportAuth');
+
 const authRouter = require('./api/routes/authRoutes');
 const hotelsRouter = require('./api/routes/hotelsRoutes');
 const roomsRouter = require('./api/routes/roomsRoutes');
@@ -27,7 +28,7 @@ app.use((req, res, next) => {
   next(new AppError('Page Not Found', 404));
 });
 
-app.use(globalErrorHandler);
+app.use(globalErrorController);
 
 db.sync().then(() => {
   app.listen(port, () => console.log(`Listening on port ${port}...`));

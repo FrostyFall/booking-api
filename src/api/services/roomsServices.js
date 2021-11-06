@@ -1,5 +1,5 @@
 const RoomsRepo = require('../repositories/roomsRepository');
-const AppError = require('../../config/appError');
+const AppError = require('../../utils/appError');
 
 exports.addRoom = async (hotelID, img, type, cost) => {
   try {

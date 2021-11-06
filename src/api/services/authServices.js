@@ -1,5 +1,5 @@
 const UsersRepo = require('../repositories/usersRepository');
-const AppError = require('../../config/appError');
+const AppError = require('../../utils/appError');
 const {
   hashPassword,
   isValidPassword,
