@@ -32,7 +32,7 @@ exports.signToken = async (userId) => {
       }
 
       resolve({
-        str: 'Bearer ' + token,
+        str: token,
         expiresIn,
       });
     });

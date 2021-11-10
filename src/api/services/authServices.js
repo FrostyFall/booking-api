@@ -18,7 +18,7 @@ exports.signup = async (email, password, firstName, lastName, roleID) => {
       roleID
     );
 
-    const token = await signToken(result.user.dataValues.id);
+    const token = await signToken(result.userID);
 
     return {
       status: 'success',
@@ -47,6 +47,6 @@ exports.login = async (email, password) => {
       token,
     };
   } catch (err) {
-    throw new AppError(err.message, 500);
+    throw new AppError('Failed to login user', 500);
   }
 };

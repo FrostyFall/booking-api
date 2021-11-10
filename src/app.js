@@ -13,7 +13,7 @@ const bookedRoomsRouter = require('./api/routes/bookedRoomsRoutes');
 const usersRouter = require('./api/routes/usersRoutes');
 
 const app = express();
-const port = process.env.PORT ?? 3000;
+const PORT = process.env.PORT ?? 3000;
 
 app.use(express.json());
 app.use(passport.initialize());
@@ -30,6 +30,16 @@ app.use((req, res, next) => {
 
 app.use(globalErrorController);
 
-db.sync().then(() => {
-  app.listen(port, () => console.log(`Listening on port ${port}...`));
-});
+db.sync()
+  .then(() => {
+    app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
+  })
+  .catch((err) => {
+    const { address, port } = err.original;
+
+    console.log(
+      `Failed to connect to the database on ${address}:${port}. Shutting down...`
+    );
+
+    process.exit(1);
+  });

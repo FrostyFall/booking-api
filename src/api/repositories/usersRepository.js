@@ -31,20 +31,18 @@ exports.createOne = async (email, password, firstName, lastName, roleID) => {
     email,
     password,
   });
-  const userInfo = await UserInfo.create({
+  await UserInfo.create({
     user_id: user.id,
     first_name: firstName,
     last_name: lastName,
   });
-  const usersRoles = await UsersRoles.create({
+  await UsersRoles.create({
     user_id: user.id,
     role_id: roleID,
   });
 
   return {
-    user,
-    userInfo,
-    usersRoles,
+    userID: user.id,
   };
 };
 
