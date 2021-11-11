@@ -36,6 +36,10 @@ exports.getUserBookings = async (req, res, next) => {
   try {
     const userID = parseInt(req.params.id, 10);
 
+    if (!(await UsersServices.getUser(userID)).user) {
+      return next(new AppError('Specified user not found', 400));
+    }
+
     if (req.user.role === 'user' && userID !== req.user.id) {
       return next(
         new AppError(
