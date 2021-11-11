@@ -62,7 +62,8 @@ exports.getHotelFreeRooms = async (req, res, next) => {
 exports.addReview = async (req, res, next) => {
   try {
     const { id: hotelID } = req.params;
-    const { userID, review, stars } = req.body;
+    const userID = req.user.id;
+    const { review, stars } = req.body;
 
     await HotelsServices.addReview(hotelID, userID, review, stars);
 
