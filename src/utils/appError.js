@@ -1,6 +1,6 @@
 function AppError(message, statusCode) {
   this.message = message;
-  this.status = 'fail';
+  this.status = 'error';
   this.statusCode = statusCode;
   this.isOperational = true;
 

@@ -20,7 +20,7 @@ exports.deleteSelf = async (req, res, next) => {
 
     if (userID !== authUserID) {
       return next(
-        new AppError('You have no permission to delete specified user', 403)
+        new AppError('You have no permission to delete this user', 403)
       );
     }
 
