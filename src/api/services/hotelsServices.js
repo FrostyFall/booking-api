@@ -2,108 +2,73 @@ const HotelsRepo = require('../repositories/hotelsRepository');
 const RoomsRepo = require('../repositories/roomsRepository');
 const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
 const HotelReviewsRepo = require('../repositories/hotelReviewsRepository');
-const AppError = require('../../config/appError');
 
 exports.addHotel = async (img, title, description) => {
-  try {
-    await HotelsRepo.createOne(img, title, description);
+  await HotelsRepo.createOne(img, title, description);
 
-    return {
-      status: 'success',
-      message: 'Hotel has been added successfully',
-    };
-  } catch (err) {
-    throw new AppError('Failed to add a hotel', 500);
-  }
+  return {
+    status: 'success',
+    message: 'Hotel has been added successfully',
+  };
 };
 
 exports.deleteHotel = async (hotelID) => {
-  try {
-    await HotelsRepo.deleteById(hotelID);
+  await HotelsRepo.deleteById(hotelID);
 
-    return {
-      status: 'success',
-      message: 'Hotel has been deleted successfully',
-    };
-  } catch (err) {
-    throw new AppError('Failed to delete a hotel', 500);
-  }
+  return {
+    status: 'success',
+    message: 'Hotel has been deleted successfully',
+  };
 };
 
 exports.getHotels = async () => {
-  try {
-    const hotels = await HotelsRepo.findAll();
+  const hotels = await HotelsRepo.findAll();
 
-    return {
-      status: 'success',
-      data: hotels,
-    };
-  } catch (err) {
-    throw new AppError('Failed to get all hotels', 500);
-  }
+  return {
+    status: 'success',
+    data: hotels,
+  };
 };
 
 exports.getHotel = async (hotelID) => {
-  try {
-    const hotel = await HotelsRepo.findById(hotelID);
+  const hotel = await HotelsRepo.findById(hotelID);
 
-    return {
-      status: 'success',
-      data: hotel,
-    };
-  } catch (err) {
-    throw new AppError(
-      'Failed to get the hotel details and its free rooms',
-      500
-    );
-  }
+  return {
+    status: 'success',
+    data: hotel,
+  };
 };
 
 exports.getHotelFreeRooms = async (hotelID) => {
-  try {
-    const hotelRooms = await RoomsRepo.findByHotelId(hotelID);
-    const hotelRoomsIDs = hotelRooms.map((room) => room.id);
-    const hotelBookedRooms = await BookedRoomsRepo.findByRoomId(hotelRoomsIDs);
-    const hotelBookedRoomsIDs = hotelBookedRooms.map((room) => room.room_id);
-    const freeRoomsIDs = hotelRoomsIDs.filter(
-      (roomID) => !hotelBookedRoomsIDs.includes(roomID)
-    );
-    const freeRooms = await RoomsRepo.findById(freeRoomsIDs);
+  const hotelRooms = await RoomsRepo.findByHotelId(hotelID);
+  const hotelRoomsIDs = hotelRooms.map((room) => room.id);
+  const hotelBookedRooms = await BookedRoomsRepo.findByRoomId(hotelRoomsIDs);
+  const hotelBookedRoomsIDs = hotelBookedRooms.map((room) => room.room_id);
+  const freeRoomsIDs = hotelRoomsIDs.filter(
+    (roomID) => !hotelBookedRoomsIDs.includes(roomID)
+  );
+  const freeRooms = await RoomsRepo.findById(freeRoomsIDs);
 
-    return {
-      status: 'success',
-      data: freeRooms,
-    };
-  } catch (err) {
-    throw new AppError(
-      'Failed to get the hotel details and its free rooms',
-      500
-    );
-  }
+  return {
+    status: 'success',
+    data: freeRooms,
+  };
 };
 
 exports.addReview = async (hotelID, userID, review, stars) => {
-  try {
-    await HotelReviewsRepo.createOne(hotelID, userID, review, stars);
+  await HotelReviewsRepo.createOne(hotelID, userID, review, stars);
 
-    return {
-      status: 'success',
-      message: 'Review has been added successfully',
-    };
-  } catch (err) {
-    throw new AppError('Failed to add a hotel review', 500);
-  }
+  return {
+    status: 'success',
+    message: 'Review has been added successfully',
+  };
 };
 
 exports.getReviews = async (hotelID) => {
-  try {
-    const reviews = await HotelReviewsRepo.findByHotelId(hotelID);
+  const reviews = await HotelReviewsRepo.findByHotelId(hotelID);
 
-    return {
-      status: 'success',
-      data: reviews,
-    };
-  } catch (err) {
-    throw new AppError('Failed to get the hotel reviews', 500);
-  }
+  return {
+    status: 'success',
+    data: reviews,
+  };
 };

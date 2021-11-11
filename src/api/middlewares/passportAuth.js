@@ -1,5 +1,5 @@
 const passport = require('../../config/passport');
-const AppError = require('../../config/appError');
+const AppError = require('../../utils/appError');
 
 module.exports = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {

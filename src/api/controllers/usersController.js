@@ -1,6 +1,6 @@
 const UsersServices = require('../services/usersServices');
 const BookedRoomsServices = require('../services/bookedRoomsServices');
-const AppError = require('../../config/appError');
+const AppError = require('../../utils/appError');
 
 exports.getUsers = async (req, res, next) => {
   try {

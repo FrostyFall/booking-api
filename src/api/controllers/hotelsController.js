@@ -1,9 +1,9 @@
 const HotelsServices = require('../services/hotelsServices');
 
 exports.addHotel = async (req, res, next) => {
-  const { img, title, description } = req.body;
-
   try {
+    const { img, title, description } = req.body;
+
     const createdHotelRes = await HotelsServices.addHotel(
       img,
       title,
@@ -17,9 +17,9 @@ exports.addHotel = async (req, res, next) => {
 };
 
 exports.deleteHotel = async (req, res, next) => {
-  const { id } = req.params;
-
   try {
+    const { id } = req.params;
+
     const deletedHotelRes = await HotelsServices.deleteHotel(id);
 
     res.status(200).json(deletedHotelRes);
