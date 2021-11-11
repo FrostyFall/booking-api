@@ -1,17 +1,24 @@
 const BookedRoomsServices = require('../services/bookedRoomsServices');
+const RoomsServices = require('../services/roomsServices');
+const Response = require('../../utils/response');
+const AppError = require('../../utils/appError');
 
 exports.bookRoom = async (req, res, next) => {
   try {
-    const { roomID, userID, bookedDate, leaveDate } = req.body;
+    const { roomID, bookedDate, leaveDate } = req.body;
+    const userID = parseInt(req.user.id, 10);
 
-    const bookedRoomRes = await BookedRoomsServices.bookRoom(
-      roomID,
-      userID,
-      bookedDate,
-      leaveDate
-    );
+    if (!(await RoomsServices.getRoom(roomID))) {
+      return next(new AppError('Specified room not found', 400));
+    }
 
-    res.status(201).json(bookedRoomRes);
+    if ((await BookedRoomsServices.getRoomBookings(roomID)).length > 0) {
+      return next(new AppError('This room has already been booked', 400));
+    }
+
+    await BookedRoomsServices.bookRoom(roomID, userID, bookedDate, leaveDate);
+
+    res.status(201).json(new Response('Room has been booked successfully'));
   } catch (err) {
     next(err);
   }
@@ -20,10 +27,25 @@ exports.bookRoom = async (req, res, next) => {
 exports.cancelBooking = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const userID = parseInt(req.user.id, 10);
 
-    const cancelledBookingRes = await BookedRoomsServices.cancelBooking(id);
+    const booking = await BookedRoomsServices.getBookingById(id);
 
-    res.status(201).json(cancelledBookingRes);
+    if (!booking) {
+      return next(new AppError('Specified booking is not found', 400));
+    }
+
+    if (req.user.role === 'user' && booking.user_id !== userID) {
+      return next(
+        new AppError('You have no permission to delete this booking', 403)
+      );
+    }
+
+    await BookedRoomsServices.cancelBooking(id);
+
+    res
+      .status(201)
+      .json(new Response('Booking has been cancelled successfully'));
   } catch (err) {
     next(err);
   }
@@ -33,7 +55,7 @@ exports.getAllBookings = async (req, res, next) => {
   try {
     const fetchedBookings = await BookedRoomsServices.getBookings();
 
-    res.status(200).json(fetchedBookings);
+    res.status(200).json(new Response(null, fetchedBookings));
   } catch (err) {
     next(err);
   }

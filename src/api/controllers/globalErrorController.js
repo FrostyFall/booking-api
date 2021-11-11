@@ -1,6 +1,6 @@
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode ?? 500).json({
-    status: 'fail',
+    status: err.status,
     name: err.name,
     message: err.message,
     err,

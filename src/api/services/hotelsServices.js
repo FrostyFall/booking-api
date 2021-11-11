@@ -4,39 +4,23 @@ const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
 const HotelReviewsRepo = require('../repositories/hotelReviewsRepository');
 
 exports.addHotel = async (img, title, description) => {
-  await HotelsRepo.createOne(img, title, description);
-
-  return {
-    status: 'success',
-    message: 'Hotel has been added successfully',
-  };
+  return await HotelsRepo.createOne(img, title, description);
 };
 
 exports.deleteHotel = async (hotelID) => {
-  await HotelsRepo.deleteById(hotelID);
-
-  return {
-    status: 'success',
-    message: 'Hotel has been deleted successfully',
-  };
+  return await HotelsRepo.deleteById(hotelID);
 };
 
 exports.getHotels = async () => {
   const hotels = await HotelsRepo.findAll();
 
-  return {
-    status: 'success',
-    data: hotels,
-  };
+  return { hotels };
 };
 
 exports.getHotel = async (hotelID) => {
   const hotel = await HotelsRepo.findById(hotelID);
 
-  return {
-    status: 'success',
-    data: hotel,
-  };
+  return { hotel };
 };
 
 exports.getHotelFreeRooms = async (hotelID) => {
@@ -49,26 +33,15 @@ exports.getHotelFreeRooms = async (hotelID) => {
   );
   const freeRooms = await RoomsRepo.findById(freeRoomsIDs);
 
-  return {
-    status: 'success',
-    data: freeRooms,
-  };
+  return { freeRooms };
 };
 
 exports.addReview = async (hotelID, userID, review, stars) => {
-  await HotelReviewsRepo.createOne(hotelID, userID, review, stars);
-
-  return {
-    status: 'success',
-    message: 'Review has been added successfully',
-  };
+  return await HotelReviewsRepo.createOne(hotelID, userID, review, stars);
 };
 
 exports.getReviews = async (hotelID) => {
   const reviews = await HotelReviewsRepo.findByHotelId(hotelID);
 
-  return {
-    status: 'success',
-    data: reviews,
-  };
+  return { reviews };
 };
