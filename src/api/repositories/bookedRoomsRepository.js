@@ -46,3 +46,13 @@ exports.deleteById = async (id) => {
 
   return result;
 };
+
+exports.findById = async (id) => {
+  const result = await BookedRoom.findAll({
+    where: {
+      id,
+    },
+  });
+
+  return result[0];
+};

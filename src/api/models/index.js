@@ -72,7 +72,6 @@ Room.hasOne(BookedRoom, {
     type: DataTypes.INTEGER,
     allowNull: false,
     name: 'room_id',
-    unique: true,
   },
   sourceKey: 'id',
 });

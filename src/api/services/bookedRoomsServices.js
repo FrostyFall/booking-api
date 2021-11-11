@@ -1,37 +1,31 @@
 const BookedRoomsRepo = require('../repositories/bookedRoomsRepository');
 
-exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
-  await BookedRoomsRepo.createOne(roomID, userID, bookedDate, leaveDate);
+exports.getRoomBookings = async (roomID) => {
+  return await BookedRoomsRepo.findByRoomId(roomID);
+};
 
-  return {
-    status: 'success',
-    message: 'Room has been booked successfully',
-  };
+exports.bookRoom = async (roomID, userID, bookedDate, leaveDate) => {
+  return await BookedRoomsRepo.createOne(roomID, userID, bookedDate, leaveDate);
 };
 
 exports.cancelBooking = async (bookingID) => {
-  await BookedRoomsRepo.deleteById(bookingID);
-
-  return {
-    status: 'success',
-    message: 'Booking has been cancelled successfully',
-  };
+  return await BookedRoomsRepo.deleteById(bookingID);
 };
 
 exports.getUserBookings = async (userID) => {
   const bookings = await BookedRoomsRepo.findByUserId(userID);
 
-  return {
-    status: 'success',
-    data: bookings,
-  };
+  return { bookings };
 };
 
 exports.getBookings = async () => {
   const bookings = await BookedRoomsRepo.findAll();
 
-  return {
-    status: 'success',
-    data: bookings,
-  };
+  return { bookings };
+};
+
+exports.getBookingById = async (id) => {
+  const booking = await BookedRoomsRepo.findById(id);
+
+  return booking;
 };

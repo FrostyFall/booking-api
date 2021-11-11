@@ -19,11 +19,7 @@ exports.signup = async (email, password, firstName, lastName, roleID) => {
 
   const token = await signToken(result.userID);
 
-  return {
-    status: 'success',
-    data: result,
-    token,
-  };
+  return { userID: result.userID, token };
 };
 
 exports.login = async (email, password) => {
@@ -36,9 +32,5 @@ exports.login = async (email, password) => {
   const userId = user.dataValues.id;
   const token = await signToken(userId);
 
-  return {
-    status: 'success',
-    message: 'User has been logged in',
-    token,
-  };
+  return { token };
 };

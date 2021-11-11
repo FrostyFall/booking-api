@@ -1,12 +1,13 @@
 const UsersServices = require('../services/usersServices');
 const BookedRoomsServices = require('../services/bookedRoomsServices');
 const AppError = require('../../utils/appError');
+const Response = require('../../utils/response');
 
 exports.getUsers = async (req, res, next) => {
   try {
     const fetchedUsers = await UsersServices.getUsers();
 
-    res.status(200).json(fetchedUsers);
+    res.status(200).json(new Response(null, fetchedUsers));
   } catch (err) {
     next(err);
   }
@@ -23,9 +24,9 @@ exports.deleteSelf = async (req, res, next) => {
       );
     }
 
-    const deletedUserRes = await UsersServices.deleteUser(userID);
+    await UsersServices.deleteUser(userID);
 
-    res.status(200).json(deletedUserRes);
+    res.status(200).json(new Response('User has been deleted'));
   } catch (err) {
     next(err);
   }
@@ -48,7 +49,7 @@ exports.getUserBookings = async (req, res, next) => {
       userID
     );
 
-    res.status(200).json(fetchedUserBookings);
+    res.status(200).json(new Response(null, fetchedUserBookings));
   } catch (err) {
     next(err);
   }
