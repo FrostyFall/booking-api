@@ -7,6 +7,8 @@ exports.bookRoom = async (req, res, next) => {
     const { roomID, bookedDate, leaveDate } = req.body;
     const userID = parseInt(req.user.id, 10);
 
+    // check if room exists
+
     if ((await BookedRoomsServices.getRoomBookings(roomID)).length > 0) {
       return next(new AppError('This room has already been booked', 400));
     }
