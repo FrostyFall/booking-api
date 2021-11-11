@@ -1,28 +1,30 @@
 const HotelsServices = require('../services/hotelsServices');
+const Response = require('../../utils/response');
+const AppError = require('../../utils/appError');
 
 exports.addHotel = async (req, res, next) => {
-  const { img, title, description } = req.body;
-
   try {
-    const createdHotelRes = await HotelsServices.addHotel(
-      img,
-      title,
-      description
-    );
+    const { img, title, description } = req.body;
 
-    res.status(201).json(createdHotelRes);
+    await HotelsServices.addHotel(img, title, description);
+
+    res.status(201).json(new Response('Hotel has been added successfully'));
   } catch (err) {
     next(err);
   }
 };
 
 exports.deleteHotel = async (req, res, next) => {
-  const { id } = req.params;
-
   try {
-    const deletedHotelRes = await HotelsServices.deleteHotel(id);
+    const { id } = req.params;
 
-    res.status(200).json(deletedHotelRes);
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
+
+    await HotelsServices.deleteHotel(id);
+
+    res.status(200).json(new Response('Hotel has been deleted successfully'));
   } catch (err) {
     next(err);
   }
@@ -32,7 +34,7 @@ exports.getHotels = async (req, res, next) => {
   try {
     const fetchedHotels = await HotelsServices.getHotels();
 
-    res.status(200).json(fetchedHotels);
+    res.status(200).json(new Response(null, fetchedHotels));
   } catch (err) {
     next(err);
   }
@@ -41,9 +43,14 @@ exports.getHotels = async (req, res, next) => {
 exports.getHotel = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
+
     const fetchedHotel = await HotelsServices.getHotel(id);
 
-    res.status(200).json(fetchedHotel);
+    res.status(200).json(new Response(null, fetchedHotel));
   } catch (err) {
     next(err);
   }
@@ -52,9 +59,14 @@ exports.getHotel = async (req, res, next) => {
 exports.getHotelFreeRooms = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
+
     const fetchedFreeRooms = await HotelsServices.getHotelFreeRooms(id);
 
-    res.status(200).json(fetchedFreeRooms);
+    res.status(200).json(new Response(null, fetchedFreeRooms));
   } catch (err) {
     next(err);
   }
@@ -63,16 +75,17 @@ exports.getHotelFreeRooms = async (req, res, next) => {
 exports.addReview = async (req, res, next) => {
   try {
     const { id: hotelID } = req.params;
-    const { userID, review, stars } = req.body;
 
-    const addReviewRes = await HotelsServices.addReview(
-      hotelID,
-      userID,
-      review,
-      stars
-    );
+    if (!(await HotelsServices.getHotel(hotelID)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
 
-    res.status(201).json(addReviewRes);
+    const userID = req.user.id;
+    const { review, stars } = req.body;
+
+    await HotelsServices.addReview(hotelID, userID, review, stars);
+
+    res.status(201).json(new Response('Review has been added successfully'));
   } catch (err) {
     next(err);
   }
@@ -81,9 +94,14 @@ exports.addReview = async (req, res, next) => {
 exports.getReviews = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
+
     const fetchedReviews = await HotelsServices.getReviews(id);
 
-    res.status(200).json(fetchedReviews);
+    res.status(200).json(new Response(null, fetchedReviews));
   } catch (err) {
     next(err);
   }

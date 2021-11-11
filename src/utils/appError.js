@@ -1,12 +1,11 @@
 function AppError(message, statusCode) {
   this.message = message;
-  this.status = 'fail';
+  this.status = 'error';
   this.statusCode = statusCode;
   this.isOperational = true;
 
-  Error.captureStackTrace(this, this.constructor);
+  Error.stackTraceLimit = 8;
+  Error.captureStackTrace(this);
 }
-
-AppError.prototype = Object.create(Error.prototype);
 
 module.exports = AppError;

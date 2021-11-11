@@ -1,6 +1,6 @@
 const UsersRolesRepo = require('../repositories/usersRolesRepository');
 const UserRolesRepo = require('../repositories/userRolesRepository');
-const AppError = require('../../config/appError');
+const AppError = require('../../utils/appError');
 
 module.exports = (...roles) => {
   return async (req, res, next) => {

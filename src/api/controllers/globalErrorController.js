@@ -1,7 +1,9 @@
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode ?? 500).json({
-    status: 'fail',
+    status: err.status,
+    name: err.name,
     message: err.message,
+    err,
     stack: err.stack,
   });
 };
@@ -9,13 +11,13 @@ const sendErrorDev = (err, res) => {
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
-      status: 'fail',
+      status: err.status,
       message: err.message,
     });
   } else {
     res.status(500).json({
       status: 'error',
-      message: 'Server Error occured',
+      message: 'Unknown Server Error occured',
     });
   }
 };

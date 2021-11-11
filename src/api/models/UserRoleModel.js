@@ -9,7 +9,6 @@ module.exports = function (sequelize, DataTypes) {
       },
       role: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
     },
