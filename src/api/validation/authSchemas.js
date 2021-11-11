@@ -1,8 +1,7 @@
 const Joi = require('joi');
 
-const { object, string, number, date } = Joi.types();
+const { object, string, number } = Joi.types();
 
-// Auth Schemas
 exports.signupSchema = object.keys({
   email: string.email().required(),
   password: string.min(8).max(32).required(),
@@ -15,11 +14,4 @@ exports.signupSchema = object.keys({
 exports.loginSchema = object.keys({
   email: string.email().required(),
   password: string.min(8).max(32).required(),
-});
-
-// Booked Rooms Schemas
-exports.bookRoomSchema = object.keys({
-  roomID: number.integer().min(1).required(),
-  bookedDate: date.iso().required(),
-  leaveDate: date.iso().greater(Joi.ref('bookedDate')).required(),
 });
