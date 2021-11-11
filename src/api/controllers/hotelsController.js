@@ -1,5 +1,6 @@
 const HotelsServices = require('../services/hotelsServices');
 const Response = require('../../utils/response');
+const AppError = require('../../utils/appError');
 
 exports.addHotel = async (req, res, next) => {
   try {
@@ -16,6 +17,10 @@ exports.addHotel = async (req, res, next) => {
 exports.deleteHotel = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
 
     await HotelsServices.deleteHotel(id);
 
@@ -39,6 +44,10 @@ exports.getHotel = async (req, res, next) => {
   try {
     const { id } = req.params;
 
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
+
     const fetchedHotel = await HotelsServices.getHotel(id);
 
     res.status(200).json(new Response(null, fetchedHotel));
@@ -51,6 +60,10 @@ exports.getHotelFreeRooms = async (req, res, next) => {
   try {
     const { id } = req.params;
 
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
+
     const fetchedFreeRooms = await HotelsServices.getHotelFreeRooms(id);
 
     res.status(200).json(new Response(null, fetchedFreeRooms));
@@ -62,6 +75,11 @@ exports.getHotelFreeRooms = async (req, res, next) => {
 exports.addReview = async (req, res, next) => {
   try {
     const { id: hotelID } = req.params;
+
+    if (!(await HotelsServices.getHotel(hotelID)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
+
     const userID = req.user.id;
     const { review, stars } = req.body;
 
@@ -76,6 +94,10 @@ exports.addReview = async (req, res, next) => {
 exports.getReviews = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    if (!(await HotelsServices.getHotel(id)).hotel) {
+      return next(new AppError('Specified hotel not found', 400));
+    }
 
     const fetchedReviews = await HotelsServices.getReviews(id);
 

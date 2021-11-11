@@ -21,7 +21,7 @@ exports.deleteById = async (id) => {
 };
 
 exports.findAll = async () => {
-  const result = await Hotel.findAll({ paranoid: false });
+  const result = await Hotel.findAll();
 
   return result;
 };
@@ -31,7 +31,6 @@ exports.findById = async (id) => {
     where: {
       id,
     },
-    paranoid: false,
   });
 
   return result[0];
