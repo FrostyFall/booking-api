@@ -1,13 +1,16 @@
 const BookedRoomsServices = require('../services/bookedRoomsServices');
-const AppError = require('../../utils/appError');
+const RoomsServices = require('../services/roomsServices');
 const Response = require('../../utils/response');
+const AppError = require('../../utils/appError');
 
 exports.bookRoom = async (req, res, next) => {
   try {
     const { roomID, bookedDate, leaveDate } = req.body;
     const userID = parseInt(req.user.id, 10);
 
-    // check if room exists
+    if (!(await RoomsServices.getRoom(roomID))) {
+      return next(new AppError('Specified room not found', 400));
+    }
 
     if ((await BookedRoomsServices.getRoomBookings(roomID)).length > 0) {
       return next(new AppError('This room has already been booked', 400));
