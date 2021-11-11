@@ -1,28 +1,19 @@
 const UsersRepo = require('../repositories/usersRepository');
-const AppError = require('../../utils/appError');
 
 exports.getUsers = async () => {
-  try {
-    const users = await UsersRepo.findAll();
+  const users = await UsersRepo.findAll();
 
-    return {
-      status: 'success',
-      data: users,
-    };
-  } catch (err) {
-    throw new AppError('Failed to get users', 500);
-  }
+  return {
+    status: 'success',
+    data: users,
+  };
 };
 
 exports.deleteUser = async (userId) => {
-  try {
-    await UsersRepo.deleteById(userId);
+  await UsersRepo.deleteById(userId);
 
-    return {
-      status: 'success',
-      message: 'User has been deleted',
-    };
-  } catch (err) {
-    throw new AppError('Failed to delete user', 500);
-  }
+  return {
+    status: 'success',
+    message: 'User has been deleted',
+  };
 };

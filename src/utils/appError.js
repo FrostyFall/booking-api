@@ -8,6 +8,4 @@ function AppError(message, statusCode) {
   Error.captureStackTrace(this);
 }
 
-AppError.prototype = Object.create(Error.prototype);
-
 module.exports = AppError;
