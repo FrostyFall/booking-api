@@ -9,3 +9,9 @@ exports.findById = async (id) => {
 
   return result[0].dataValues;
 };
+
+exports.getAllRoles = async () => {
+  const result = await UserRole.findAll();
+
+  return result;
+};

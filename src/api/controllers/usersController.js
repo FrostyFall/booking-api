@@ -36,7 +36,7 @@ exports.getUserBookings = async (req, res, next) => {
   try {
     const userID = parseInt(req.params.id, 10);
 
-    if (!(await UsersServices.getUser(userID)).user) {
+    if (!(await UsersServices.getUserById(userID)).user) {
       return next(new AppError('Specified user not found', 400));
     }
 

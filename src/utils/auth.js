@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const UserRolesServices = require('../api/services/userRolesServices');
 const AppError = require('./appError');
 
 exports.hashPassword = async (password) => {
@@ -37,4 +38,21 @@ exports.signToken = async (userId) => {
       });
     });
   });
+};
+
+exports.findRoleID = async (role) => {
+  let roleID = -1;
+  const loweredRole = role.toLowerCase();
+  const roles = await UserRolesServices.getRoles();
+  const roleNames = roles.map((singleRole) => {
+    return { id: singleRole.id, role: singleRole.role };
+  });
+
+  roleNames.forEach((singleRole) => {
+    if (singleRole.role === loweredRole) {
+      roleID = singleRole.id;
+    }
+  });
+
+  return roleID;
 };
