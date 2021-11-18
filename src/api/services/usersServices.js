@@ -10,8 +10,14 @@ exports.deleteUser = async (userId) => {
   return await UsersRepo.deleteById(userId);
 };
 
-exports.getUser = async (userId) => {
+exports.getUserById = async (userId) => {
   const user = await UsersRepo.findById(userId);
+
+  return { user };
+};
+
+exports.getUserByEmail = async (email) => {
+  const user = await UsersRepo.findByEmail(email);
 
   return { user };
 };
