@@ -1,11 +1,16 @@
 const express = require('express');
-const controller = require('../controllers/hotelsController');
+const controller = require('../controllers/hotelController');
 const authorize = require('../middlewares/authorize');
 const validate = require('../middlewares/validate');
 const { addHotelSchema, addReviewSchema } =
   require('../validation').hotelsSchemas;
+// const upload = require('../../config/multer');
 
 const router = express.Router();
+
+// router.post('/upload', authorize('admin'), upload.any(), (req, res) =>
+//   res.send('Got file')
+// );
 
 router
   .route('/')

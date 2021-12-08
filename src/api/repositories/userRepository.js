@@ -7,26 +7,32 @@ exports.findAll = async () => {
 };
 
 exports.findById = async (id) => {
-  const result = await User.findAll({
+  const result = await User.findOne({
     where: {
       id,
     },
   });
 
-  return result[0];
+  return result;
 };
 
 exports.findByEmail = async (email) => {
-  const result = await User.findAll({
+  const result = await User.findOne({
     where: {
       email,
     },
   });
 
-  return result[0];
+  return result;
 };
 
-exports.createOne = async (email, password, firstName, lastName, roleID) => {
+exports.createOne = async ({
+  email,
+  hashedPass: password,
+  firstName,
+  lastName,
+  roleID,
+}) => {
   const user = await User.create({
     email,
     password,

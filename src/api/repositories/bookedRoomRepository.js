@@ -1,6 +1,7 @@
 const { BookedRoom } = require('../models');
 
 exports.findByRoomId = async (roomID) => {
+  await BookedRoom.getBookedRooms();
   const result = await BookedRoom.findAll({
     where: {
       room_id: roomID,
@@ -26,7 +27,7 @@ exports.findAll = async () => {
   return result;
 };
 
-exports.createOne = async (roomID, userID, bookedDate, leaveDate) => {
+exports.createOne = async ({ roomID, userID, bookedDate, leaveDate }) => {
   const result = await BookedRoom.create({
     room_id: roomID,
     user_id: userID,
@@ -48,11 +49,11 @@ exports.deleteById = async (id) => {
 };
 
 exports.findById = async (id) => {
-  const result = await BookedRoom.findAll({
+  const result = await BookedRoom.findOne({
     where: {
       id,
     },
   });
 
-  return result[0];
+  return result;
 };

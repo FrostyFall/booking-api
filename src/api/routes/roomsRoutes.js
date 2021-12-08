@@ -1,5 +1,5 @@
 const express = require('express');
-const controller = require('../controllers/roomsController');
+const controller = require('../controllers/roomController');
 const authorize = require('../middlewares/authorize');
 const validate = require('../middlewares/validate');
 const { addRoomSchema } = require('../validation').roomsSchemas;

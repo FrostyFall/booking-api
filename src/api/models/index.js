@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../../config/dbConnection');
+const sequelize = require('../../config/DBConnection');
 
 const filebasename = path.basename(__filename);
 const db = {};
@@ -36,7 +36,7 @@ const {
   User,
   BookedRoom,
   UserInfo,
-  UserRole,
+  Role,
   UsersRoles,
 } = db;
 
@@ -103,7 +103,7 @@ User.hasMany(UsersRoles, {
   sourceKey: 'id',
 });
 
-UserRole.hasMany(UsersRoles, {
+Role.hasMany(UsersRoles, {
   foreignKey: {
     type: DataTypes.INTEGER,
     allowNull: false,

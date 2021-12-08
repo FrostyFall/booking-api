@@ -1,6 +1,6 @@
 module.exports = function (sequelize, DataTypes) {
-  const UserRole = sequelize.define(
-    'UserRole',
+  const Role = sequelize.define(
+    'Role',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -22,5 +22,5 @@ module.exports = function (sequelize, DataTypes) {
     }
   );
 
-  return UserRole;
+  return Role;
 };
