@@ -1,7 +1,6 @@
 const { BookedRoom } = require('../models');
 
 exports.findByRoomId = async (roomID) => {
-  await BookedRoom.getBookedRooms();
   const result = await BookedRoom.findAll({
     where: {
       room_id: roomID,

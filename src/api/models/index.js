@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../../config/DBConnection');
+const HotelModel = require('./HotelModel');
 
 const filebasename = path.basename(__filename);
 const db = {};
@@ -64,6 +65,8 @@ Hotel.hasMany(Room, {
     allowNull: false,
     name: 'hotel_id',
   },
+  hooks: true,
+  onDelete: 'CASCADE',
   sourceKey: 'id',
 });
 
@@ -110,6 +113,16 @@ Role.hasMany(UsersRoles, {
     name: 'role_id',
   },
   sourceKey: 'id',
+});
+
+// Hooks
+Hotel.addHook('afterDestroy', async (instance, options) => {
+  await Room.destroy({
+    where: {
+      hotel_id: instance.id,
+    },
+    truncate: true,
+  });
 });
 
 module.exports = db;

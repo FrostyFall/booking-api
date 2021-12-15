@@ -15,6 +15,7 @@ exports.deleteById = async (id) => {
     where: {
       id,
     },
+    individualHooks: true,
   });
 
   return result;
