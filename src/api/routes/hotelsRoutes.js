@@ -2,16 +2,16 @@ const express = require('express');
 const controller = require('../controllers/hotelController');
 const authorize = require('../middlewares/authorize');
 const validate = require('../middlewares/validate');
+const multerUpload = require('../middlewares/multerUpload');
 const { addHotelSchema, addReviewSchema } =
   require('../validation').hotelsSchemas;
-const upload = require('../../config/multer');
 
 const router = express.Router();
 
 router.post(
   '/:id/upload/',
   authorize('admin'),
-  upload.any(),
+  multerUpload,
   controller.uploadHotelImage
 );
 

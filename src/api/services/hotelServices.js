@@ -5,8 +5,8 @@ const HotelReviewRepo = require('../repositories/hotelReviewRepository');
 const AppError = require('../../utils/appError');
 
 exports.uploadHotelImage = async ({ id, files }) => {
-  if (files.length !== 1) {
-    throw new AppError('You can upload only one file', 400);
+  if (files.length === 0) {
+    throw new AppError('Not a single file has been uploaded', 400);
   }
 
   const { path } = files[0];
