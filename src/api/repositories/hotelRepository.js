@@ -1,6 +1,6 @@
 const { Hotel } = require('../models');
 
-exports.createOne = async ({ img, title, description }) => {
+exports.createOne = async ({ title, description, img = null }) => {
   const result = await Hotel.create({
     img,
     title,
@@ -22,7 +22,8 @@ exports.deleteById = async (id) => {
 };
 
 exports.findAll = async () => {
-  const result = await Hotel.findAll(); // Insert ALL fields
+  // FIXME: Insert all fields in query methods
+  const result = await Hotel.findAll();
 
   return result;
 };

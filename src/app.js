@@ -25,7 +25,7 @@ app.use('/booked-rooms', passportAuth, bookedRoomsRouter);
 app.use('/users', passportAuth, usersRouter);
 
 app.use((req, res, next) => {
-  next(new AppError('Page Not Found', 404));
+  next(new AppError('Unknown path', 404));
 });
 
 app.use(globalErrorController);

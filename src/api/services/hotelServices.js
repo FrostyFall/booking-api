@@ -4,8 +4,30 @@ const BookedRoomRepo = require('../repositories/bookedRoomRepository');
 const HotelReviewRepo = require('../repositories/hotelReviewRepository');
 const AppError = require('../../utils/appError');
 
-exports.addHotel = async ({ img, title, description }) => {
-  return await HotelRepo.createOne({ img, title, description });
+exports.uploadHotelImage = async ({ id, files }) => {
+  if (files.length !== 1) {
+    throw new AppError('You can upload only one file', 400);
+  }
+
+  const { fieldname, destination, filename } = files[0];
+
+  if (fieldname !== 'hotel_img') {
+    throw new AppError('Specified file does not relate to a hotel', 400);
+  }
+
+  const hotel = await HotelRepo.findById(id);
+
+  if (!hotel) {
+    throw new AppError('Specified hotel not found', 404);
+  }
+
+  await hotel.update({ img: destination + '/' + filename });
+
+  return { hotel };
+};
+
+exports.addHotel = async ({ title, description }) => {
+  return await HotelRepo.createOne({ title, description });
 };
 
 exports.deleteHotel = async (hotelID) => {

@@ -30,17 +30,23 @@ const storage = multer.diskStorage({
     }
   },
   filename: (req, file, cb) => {
+    let filename = file.originalname;
+    const { id: objId } = req.params;
+    const fileMimeData = file.mimetype.split('/');
+    const fileExtension = fileMimeData[fileMimeData.length - 1];
+
     if (file.fieldname === 'hotel_img') {
-      cb(null, file.originalname);
+      filename = 'hotel_id_' + objId + '.' + fileExtension;
     } else if (file.fieldname === 'room_img') {
-      cb(null, file.originalname);
+      filename = 'room_id_' + objId + '.' + fileExtension;
     }
+
+    cb(null, filename);
   },
 });
 
 const fileFilter = (req, file, cb) => {
   const acceptableMimeTypes = ['image/png', 'image/jpeg'];
-  console.log(file);
 
   if (!acceptableMimeTypes.includes(file.mimetype)) {
     cb(new AppError(`Not acceptable mime type for '${file.originalname}'`));
@@ -50,8 +56,8 @@ const fileFilter = (req, file, cb) => {
 };
 
 const limits = {
-  files: 6,
-  fileSize: 4 * 1024,
+  files: 1,
+  // fileSize: 100 * 1024,
 };
 
 const upload = multer({ storage, fileFilter, limits });

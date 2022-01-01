@@ -1,11 +1,23 @@
 const HotelServices = require('../services/hotelServices');
 const Response = require('../../utils/response');
 
+exports.uploadHotelImage = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    await HotelServices.uploadHotelImage({ id, files: req.files });
+
+    res.status(201).json(new Response('Image has been uploaded successfully'));
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.addHotel = async (req, res, next) => {
   try {
-    const { img, title, description } = req.body;
+    const { title, description } = req.body;
 
-    await HotelServices.addHotel({ img, title, description });
+    await HotelServices.addHotel({ title, description });
 
     res.status(201).json(new Response('Hotel has been added successfully'));
   } catch (err) {
