@@ -7,7 +7,9 @@ exports.uploadHotelImage = async (req, res, next) => {
 
     await HotelServices.uploadHotelImage({ id, files: req.files });
 
-    res.status(201).json(new Response('Image has been uploaded successfully'));
+    res
+      .status(201)
+      .json(new Response('Hotel image has been uploaded successfully'));
   } catch (err) {
     next(err);
   }

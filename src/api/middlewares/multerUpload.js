@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
     if (err instanceof multer.MulterError) {
       next(new AppError(err.message, 400));
     } else if (err) {
-      next(new AppError('Unknown file upload error occured', 400));
+      next(err);
     }
 
     next();

@@ -13,10 +13,6 @@ exports.uploadHotelImage = async ({ id, files }) => {
 
   const hotel = await HotelRepo.findById(id);
 
-  // if (!hotel) {
-  //   throw new AppError('Specified hotel not found', 404);
-  // }
-
   await hotel.update({ img: './' + path });
 
   return { hotel };
