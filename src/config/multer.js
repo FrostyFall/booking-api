@@ -47,9 +47,22 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   const acceptableMimeTypes = ['image/png', 'image/jpeg'];
+  const { baseUrl } = req;
+  const { fieldname } = file;
 
   if (!acceptableMimeTypes.includes(file.mimetype)) {
-    cb(new AppError(`Not acceptable mime type for '${file.originalname}'`));
+    return cb(
+      new AppError(`Not acceptable mime type for '${file.originalname}'`, 400),
+      false
+    );
+  }
+
+  if (baseUrl === '/hotels' && fieldname !== 'hotel_img') {
+    return cb(new AppError('File is not related to hotels', 400), false);
+  }
+
+  if (baseUrl === '/rooms' && fieldname !== 'room_img') {
+    return cb(new AppError('File is not related to rooms', 400), false);
   }
 
   cb(null, true);
@@ -57,7 +70,7 @@ const fileFilter = (req, file, cb) => {
 
 const limits = {
   files: 1,
-  // fileSize: 100 * 1024,
+  fileSize: 1024 * 1024 * parseInt(process.env.MAX_IMAGE_SIZE_MB, 10),
 };
 
 const upload = multer({ storage, fileFilter, limits });

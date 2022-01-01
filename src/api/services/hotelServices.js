@@ -9,11 +9,7 @@ exports.uploadHotelImage = async ({ id, files }) => {
     throw new AppError('You can upload only one file', 400);
   }
 
-  const { fieldname, destination, filename } = files[0];
-
-  if (fieldname !== 'hotel_img') {
-    throw new AppError('Specified file does not relate to a hotel', 400);
-  }
+  const { path } = files[0];
 
   const hotel = await HotelRepo.findById(id);
 
@@ -21,7 +17,7 @@ exports.uploadHotelImage = async ({ id, files }) => {
     throw new AppError('Specified hotel not found', 404);
   }
 
-  await hotel.update({ img: destination + '/' + filename });
+  await hotel.update({ img: './' + path });
 
   return { hotel };
 };
