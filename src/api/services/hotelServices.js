@@ -58,7 +58,7 @@ exports.getHotelFreeRooms = async (hotelID) => {
   const freeRoomsIDs = hotelRoomsIDs.filter(
     (roomID) => !hotelBookedRoomsIDs.includes(roomID)
   );
-  const freeRooms = await RoomRepo.findById(freeRoomsIDs);
+  const freeRooms = await RoomRepo.findByIds(freeRoomsIDs);
 
   return { freeRooms };
 };

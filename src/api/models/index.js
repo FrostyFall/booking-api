@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const { Sequelize, DataTypes } = require('sequelize');
+const { unlink } = require('fs/promises');
 const sequelize = require('../../config/DBConnection');
-const HotelModel = require('./HotelModel');
 
 const filebasename = path.basename(__filename);
 const db = {};
@@ -117,6 +117,22 @@ Role.hasMany(UsersRoles, {
 
 // Hooks
 Hotel.addHook('afterDestroy', async (instance, options) => {
+  if (instance.img !== null) {
+    await unlink(instance.img);
+  }
+
+  const relatedRooms = await Room.findAll({
+    where: {
+      hotel_id: instance.id,
+    },
+  });
+
+  relatedRooms.forEach(async (room) => {
+    if (room.img !== null) {
+      await unlink(room.img);
+    }
+  });
+
   await Room.destroy({
     where: {
       hotel_id: instance.id,

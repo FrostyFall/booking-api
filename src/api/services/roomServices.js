@@ -16,14 +16,13 @@ exports.uploadRoomImage = async ({ id, files }) => {
   return { room };
 };
 
-exports.addRoom = async ({ hotelID, img, type, cost }) => {
+exports.addRoom = async ({ hotelID, type, cost }) => {
   if (!(await HotelServices.getHotel(hotelID)).hotel) {
     throw new AppError('Specified hotel not found', 400);
   }
 
   return await RoomRepo.createOne({
     hotelID,
-    img,
     type,
     cost,
   });
