@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const UserRolesServices = require('../api/services/userRolesServices');
+const UserRolesServices = require('../api/services/roleServices');
 const AppError = require('./appError');
 
 exports.hashPassword = async (password) => {

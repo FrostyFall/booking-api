@@ -10,18 +10,18 @@ exports.findByHotelId = async (hotelID) => {
   return result;
 };
 
-exports.findOneById = async (id) => {
+exports.findByIds = async (ids) => {
   const result = await Room.findAll({
     where: {
-      id,
+      id: ids,
     },
   });
 
-  return result[0];
+  return result;
 };
 
 exports.findById = async (id) => {
-  const result = await Room.findAll({
+  const result = await Room.findOne({
     where: {
       id,
     },
@@ -30,7 +30,7 @@ exports.findById = async (id) => {
   return result;
 };
 
-exports.createOne = async (hotelID, img, type, cost) => {
+exports.createOne = async ({ hotelID, img = null, type, cost }) => {
   const result = await Room.create({ hotel_id: hotelID, img, type, cost });
 
   return result;

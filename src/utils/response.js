@@ -1,7 +1,7 @@
 function Response(message, data) {
   this.status = 'success';
-  if (message) this.message = message;
-  if (data) this.data = data;
+  this.message = message ?? '';
+  this.data = data ?? null;
 }
 
 module.exports = Response;

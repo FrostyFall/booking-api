@@ -1,11 +1,11 @@
 const UsersRolesRepo = require('../repositories/usersRolesRepository');
-const UserRolesRepo = require('../repositories/userRolesRepository');
+const RoleRepo = require('../repositories/roleRepository');
 const AppError = require('../../utils/appError');
 
 module.exports = (...roles) => {
   return async (req, res, next) => {
     const usersRoles = await UsersRolesRepo.findByUserId(req.user.id);
-    const userRole = await UserRolesRepo.findById(usersRoles.role_id);
+    const userRole = await RoleRepo.findById(usersRoles.role_id);
 
     if (!roles.includes(userRole.role)) {
       return next(
