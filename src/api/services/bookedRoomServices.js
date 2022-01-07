@@ -2,6 +2,7 @@ const BookedRoomRepo = require('../repositories/bookedRoomRepository');
 const UserServices = require('./userServices');
 const RoomServices = require('./roomServices');
 const AppError = require('../../utils/appError');
+const pagination = require('../../utils/pagination');
 
 exports.getRoomBookings = async (roomID) => {
   return await BookedRoomRepo.findByRoomId(roomID);
@@ -24,8 +25,10 @@ exports.getUserBookings = async ({ targetUserID, userID, userRole }) => {
   return { bookings };
 };
 
-exports.getBookings = async () => {
-  const bookings = await BookedRoomRepo.findAll();
+exports.getBookings = async ({ page, amount }) => {
+  const options = pagination({ page, amount });
+
+  const bookings = await BookedRoomRepo.findAll(options);
 
   return { bookings };
 };

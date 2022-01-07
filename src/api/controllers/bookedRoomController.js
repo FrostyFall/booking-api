@@ -36,7 +36,11 @@ exports.cancelBooking = async (req, res, next) => {
 
 exports.getAllBookings = async (req, res, next) => {
   try {
-    const fetchedBookings = await BookedRoomServices.getBookings();
+    const { page, amount } = req.query;
+    const fetchedBookings = await BookedRoomServices.getBookings({
+      page,
+      amount,
+    });
 
     res.status(200).json(new Response(null, fetchedBookings));
   } catch (err) {

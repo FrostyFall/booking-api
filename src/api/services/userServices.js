@@ -1,18 +1,10 @@
 const UserRepo = require('../repositories/userRepository');
+const pagination = require('../../utils/pagination');
 
 exports.getUsers = async ({ page, amount }) => {
-  let limit;
-  let offset = 0;
+  const options = pagination({ page, amount });
 
-  if (!isNaN(amount)) {
-    limit = parseInt(amount, 10);
-  }
-
-  if (!isNaN(page) && !isNaN(limit)) {
-    offset = (parseInt(page, 10) - 1) * limit;
-  }
-
-  const users = await UserRepo.findAll({ limit, offset });
+  const users = await UserRepo.findAll(options);
 
   return { users };
 };

@@ -3,6 +3,7 @@ const RoomRepo = require('../repositories/roomRepository');
 const BookedRoomRepo = require('../repositories/bookedRoomRepository');
 const HotelReviewRepo = require('../repositories/hotelReviewRepository');
 const AppError = require('../../utils/appError');
+const pagination = require('../../utils/pagination');
 
 exports.uploadHotelImage = async ({ id, files }) => {
   if (files.length === 0) {
@@ -31,18 +32,9 @@ exports.deleteHotel = async (hotelID) => {
 };
 
 exports.getHotels = async ({ page, amount }) => {
-  let limit;
-  let offset = 0;
+  const options = pagination({ page, amount });
 
-  if (!isNaN(amount)) {
-    limit = parseInt(amount, 10);
-  }
-
-  if (!isNaN(page) && !isNaN(limit)) {
-    offset = (parseInt(page, 10) - 1) * limit;
-  }
-
-  const hotels = await HotelRepo.findAll({ limit, offset });
+  const hotels = await HotelRepo.findAll(options);
 
   return { hotels };
 };
@@ -58,16 +50,7 @@ exports.getHotel = async (hotelID) => {
 };
 
 exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
-  let limit;
-  let offset = 0;
-
-  if (!isNaN(amount)) {
-    limit = parseInt(amount, 10);
-  }
-
-  if (!isNaN(page) && !isNaN(limit)) {
-    offset = (parseInt(page, 10) - 1) * limit;
-  }
+  const options = pagination({ page, amount });
 
   if (!(await this.getHotel(hotelID)).hotel) {
     throw new AppError('Specified hotel not found', 400);
@@ -80,7 +63,10 @@ exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
   const freeRoomsIDs = hotelRoomsIDs.filter(
     (roomID) => !hotelBookedRoomsIDs.includes(roomID)
   );
-  const freeRooms = await RoomRepo.findByIds({ freeRoomsIDs, limit, offset });
+
+  options.freeRoomsIDs = freeRoomsIDs;
+
+  const freeRooms = await RoomRepo.findByIds(options);
 
   return { freeRooms };
 };
