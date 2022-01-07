@@ -1,7 +1,7 @@
 const { User, UserInfo, UsersRoles } = require('../models');
 
-exports.findAll = async () => {
-  const result = await User.findAll();
+exports.findAll = async ({ limit, offset }) => {
+  const result = await User.findAll({ limit, offset });
 
   return result;
 };

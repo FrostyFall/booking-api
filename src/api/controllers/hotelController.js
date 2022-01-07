@@ -41,7 +41,8 @@ exports.deleteHotel = async (req, res, next) => {
 
 exports.getHotels = async (req, res, next) => {
   try {
-    const fetchedHotels = await HotelServices.getHotels();
+    const { page, amount } = req.query;
+    const fetchedHotels = await HotelServices.getHotels({ page, amount });
 
     res.status(200).json(new Response(null, fetchedHotels));
   } catch (err) {
@@ -64,8 +65,13 @@ exports.getHotel = async (req, res, next) => {
 exports.getHotelFreeRooms = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { page, amount } = req.query;
 
-    const fetchedFreeRooms = await HotelServices.getHotelFreeRooms(id);
+    const fetchedFreeRooms = await HotelServices.getHotelFreeRooms({
+      page,
+      amount,
+      hotelID: id,
+    });
 
     res.status(200).json(new Response(null, fetchedFreeRooms));
   } catch (err) {
@@ -90,8 +96,9 @@ exports.addReview = async (req, res, next) => {
 exports.getReviews = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { page, amount } = req.query;
 
-    const fetchedReviews = await HotelServices.getReviews(id);
+    const fetchedReviews = await HotelServices.getReviews({ id, page, amount });
 
     res.status(200).json(new Response(null, fetchedReviews));
   } catch (err) {

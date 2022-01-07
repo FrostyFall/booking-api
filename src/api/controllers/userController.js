@@ -5,7 +5,8 @@ const Response = require('../../utils/response');
 
 exports.getUsers = async (req, res, next) => {
   try {
-    const fetchedUsers = await UserServices.getUsers();
+    const { page, amount } = req.query;
+    const fetchedUsers = await UserServices.getUsers({ page, amount });
 
     res.status(200).json(new Response(null, fetchedUsers));
   } catch (err) {
