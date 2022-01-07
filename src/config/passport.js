@@ -1,6 +1,6 @@
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
-const UsersRepo = require('../api/repositories/usersRepository');
+const UsersRepo = require('../api/repositories/userRepository');
 const AppError = require('../utils/appError');
 
 const JWTStrategy = passportJWT.Strategy;

@@ -1,11 +1,11 @@
-const UsersServices = require('../services/usersServices');
-const BookedRoomsServices = require('../services/bookedRoomsServices');
+const UserServices = require('../services/userServices');
+const BookedRoomServices = require('../services/bookedRoomServices');
 const AppError = require('../../utils/appError');
 const Response = require('../../utils/response');
 
 exports.getUsers = async (req, res, next) => {
   try {
-    const fetchedUsers = await UsersServices.getUsers();
+    const fetchedUsers = await UserServices.getUsers();
 
     res.status(200).json(new Response(null, fetchedUsers));
   } catch (err) {
@@ -24,7 +24,7 @@ exports.deleteSelf = async (req, res, next) => {
       );
     }
 
-    await UsersServices.deleteUser(userID);
+    await UserServices.deleteUser(userID);
 
     res.status(200).json(new Response('User has been deleted'));
   } catch (err) {
@@ -34,24 +34,14 @@ exports.deleteSelf = async (req, res, next) => {
 
 exports.getUserBookings = async (req, res, next) => {
   try {
-    const userID = parseInt(req.params.id, 10);
+    const targetUserID = parseInt(req.params.id, 10);
+    const { id: userID, role: userRole } = req.user;
 
-    if (!(await UsersServices.getUser(userID)).user) {
-      return next(new AppError('Specified user not found', 400));
-    }
-
-    if (req.user.role === 'user' && userID !== req.user.id) {
-      return next(
-        new AppError(
-          "You have no permission to get this user's booked rooms",
-          403
-        )
-      );
-    }
-
-    const fetchedUserBookings = await BookedRoomsServices.getUserBookings(
-      userID
-    );
+    const fetchedUserBookings = await BookedRoomServices.getUserBookings({
+      targetUserID,
+      userID,
+      userRole,
+    });
 
     res.status(200).json(new Response(null, fetchedUserBookings));
   } catch (err) {

@@ -3,7 +3,7 @@ const Joi = require('joi');
 const { object, string, number } = Joi.types();
 
 exports.addHotelSchema = object.keys({
-  img: string.required(),
+  img: string.required().allow(null),
   title: string.min(4).required(),
   description: string.min(12).required(),
 });

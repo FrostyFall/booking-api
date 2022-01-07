@@ -4,7 +4,7 @@ const { object, string, number } = Joi.types();
 
 exports.addRoomSchema = object.keys({
   hotelID: number.integer().min(1).required(),
-  img: string.required(),
+  img: string.required().allow(null),
   type: string.required(),
   cost: number.integer().required(),
 });

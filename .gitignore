@@ -3,3 +3,4 @@
 .env
 .eslintrc.json
 .prettierrc.json
+/public
