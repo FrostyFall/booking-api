@@ -3,6 +3,7 @@ const RoomRepo = require('../repositories/roomRepository');
 const BookedRoomRepo = require('../repositories/bookedRoomRepository');
 const HotelReviewRepo = require('../repositories/hotelReviewRepository');
 const AppError = require('../../utils/appError');
+const pagination = require('../../utils/pagination');
 
 exports.uploadHotelImage = async ({ id, files }) => {
   if (files.length === 0) {
@@ -30,8 +31,10 @@ exports.deleteHotel = async (hotelID) => {
   return await HotelRepo.deleteById(hotelID);
 };
 
-exports.getHotels = async () => {
-  const hotels = await HotelRepo.findAll();
+exports.getHotels = async ({ page, amount }) => {
+  const options = pagination({ page, amount });
+
+  const hotels = await HotelRepo.findAll(options);
 
   return { hotels };
 };
@@ -46,7 +49,9 @@ exports.getHotel = async (hotelID) => {
   return { hotel };
 };
 
-exports.getHotelFreeRooms = async (hotelID) => {
+exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
+  const options = pagination({ page, amount });
+
   if (!(await this.getHotel(hotelID)).hotel) {
     throw new AppError('Specified hotel not found', 400);
   }
@@ -58,7 +63,10 @@ exports.getHotelFreeRooms = async (hotelID) => {
   const freeRoomsIDs = hotelRoomsIDs.filter(
     (roomID) => !hotelBookedRoomsIDs.includes(roomID)
   );
-  const freeRooms = await RoomRepo.findByIds(freeRoomsIDs);
+
+  options.freeRoomsIDs = freeRoomsIDs;
+
+  const freeRooms = await RoomRepo.findByIds(options);
 
   return { freeRooms };
 };
@@ -71,12 +79,15 @@ exports.addReview = async ({ hotelID, userID, review, stars }) => {
   return await HotelReviewRepo.createOne({ hotelID, userID, review, stars });
 };
 
-exports.getReviews = async (hotelID) => {
+exports.getReviews = async ({ id: hotelID, page, amount }) => {
   if (!(await this.getHotel(hotelID)).hotel) {
     throw new AppError('Specified hotel not found', 400);
   }
 
-  const reviews = await HotelReviewRepo.findByHotelId(hotelID);
+  const options = pagination({ page, amount });
+  options.hotelID = hotelID;
+
+  const reviews = await HotelReviewRepo.findByHotelId(options);
 
   return { reviews };
 };

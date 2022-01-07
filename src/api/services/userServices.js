@@ -1,7 +1,10 @@
 const UserRepo = require('../repositories/userRepository');
+const pagination = require('../../utils/pagination');
 
-exports.getUsers = async () => {
-  const users = await UserRepo.findAll();
+exports.getUsers = async ({ page, amount }) => {
+  const options = pagination({ page, amount });
+
+  const users = await UserRepo.findAll(options);
 
   return { users };
 };

@@ -20,8 +20,8 @@ exports.findByUserId = async (userID) => {
   return result;
 };
 
-exports.findAll = async () => {
-  const result = await BookedRoom.findAll();
+exports.findAll = async ({ limit, offset }) => {
+  const result = await BookedRoom.findAll({ limit, offset });
 
   return result;
 };

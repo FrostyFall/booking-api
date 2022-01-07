@@ -21,9 +21,9 @@ exports.deleteById = async (id) => {
   return result;
 };
 
-exports.findAll = async () => {
+exports.findAll = async ({ limit, offset }) => {
   // FIXME: Insert all fields in query methods
-  const result = await Hotel.findAll();
+  const result = await Hotel.findAll({ limit, offset });
 
   return result;
 };
