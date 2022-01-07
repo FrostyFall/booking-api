@@ -41,7 +41,8 @@ exports.deleteHotel = async (req, res, next) => {
 
 exports.getHotels = async (req, res, next) => {
   try {
-    const fetchedHotels = await HotelServices.getHotels();
+    const { page, amount } = req.query;
+    const fetchedHotels = await HotelServices.getHotels({ page, amount });
 
     res.status(200).json(new Response(null, fetchedHotels));
   } catch (err) {
