@@ -65,8 +65,13 @@ exports.getHotel = async (req, res, next) => {
 exports.getHotelFreeRooms = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { page, amount } = req.query;
 
-    const fetchedFreeRooms = await HotelServices.getHotelFreeRooms(id);
+    const fetchedFreeRooms = await HotelServices.getHotelFreeRooms({
+      page,
+      amount,
+      hotelID: id,
+    });
 
     res.status(200).json(new Response(null, fetchedFreeRooms));
   } catch (err) {

@@ -10,11 +10,13 @@ exports.findByHotelId = async (hotelID) => {
   return result;
 };
 
-exports.findByIds = async (ids) => {
+exports.findByIds = async ({ freeRoomsIDs, limit, offset }) => {
   const result = await Room.findAll({
     where: {
-      id: ids,
+      id: freeRoomsIDs,
     },
+    limit,
+    offset,
   });
 
   return result;

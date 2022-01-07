@@ -57,7 +57,18 @@ exports.getHotel = async (hotelID) => {
   return { hotel };
 };
 
-exports.getHotelFreeRooms = async (hotelID) => {
+exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
+  let limit;
+  let offset = 0;
+
+  if (!isNaN(amount)) {
+    limit = parseInt(amount, 10);
+  }
+
+  if (!isNaN(page) && !isNaN(limit)) {
+    offset = (parseInt(page, 10) - 1) * limit;
+  }
+
   if (!(await this.getHotel(hotelID)).hotel) {
     throw new AppError('Specified hotel not found', 400);
   }
@@ -69,7 +80,7 @@ exports.getHotelFreeRooms = async (hotelID) => {
   const freeRoomsIDs = hotelRoomsIDs.filter(
     (roomID) => !hotelBookedRoomsIDs.includes(roomID)
   );
-  const freeRooms = await RoomRepo.findByIds(freeRoomsIDs);
+  const freeRooms = await RoomRepo.findByIds({ freeRoomsIDs, limit, offset });
 
   return { freeRooms };
 };
