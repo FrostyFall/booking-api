@@ -96,8 +96,9 @@ exports.addReview = async (req, res, next) => {
 exports.getReviews = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { page, amount } = req.query;
 
-    const fetchedReviews = await HotelServices.getReviews(id);
+    const fetchedReviews = await HotelServices.getReviews({ id, page, amount });
 
     res.status(200).json(new Response(null, fetchedReviews));
   } catch (err) {

@@ -79,12 +79,15 @@ exports.addReview = async ({ hotelID, userID, review, stars }) => {
   return await HotelReviewRepo.createOne({ hotelID, userID, review, stars });
 };
 
-exports.getReviews = async (hotelID) => {
+exports.getReviews = async ({ id: hotelID, page, amount }) => {
   if (!(await this.getHotel(hotelID)).hotel) {
     throw new AppError('Specified hotel not found', 400);
   }
 
-  const reviews = await HotelReviewRepo.findByHotelId(hotelID);
+  const options = pagination({ page, amount });
+  options.hotelID = hotelID;
+
+  const reviews = await HotelReviewRepo.findByHotelId(options);
 
   return { reviews };
 };
