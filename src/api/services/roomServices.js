@@ -31,3 +31,11 @@ exports.addRoom = async ({ hotelID, type, cost }) => {
 exports.getRoom = async (roomID) => {
   return await RoomRepo.findById(roomID);
 };
+
+exports.deleteRoom = async (roomID) => {
+  if (!(await this.getRoom(roomID))) {
+    throw new AppError('Specified room not found', 400);
+  }
+
+  return await RoomRepo.deleteById(roomID);
+};

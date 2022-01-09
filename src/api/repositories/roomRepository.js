@@ -37,3 +37,14 @@ exports.createOne = async ({ hotelID, img = null, type, cost }) => {
 
   return result;
 };
+
+exports.deleteById = async (id) => {
+  const result = await Room.destroy({
+    where: {
+      id,
+    },
+    individualHooks: true,
+  });
+
+  return result;
+};

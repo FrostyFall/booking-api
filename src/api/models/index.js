@@ -141,4 +141,13 @@ Hotel.addHook('afterDestroy', async (instance, options) => {
   });
 });
 
+Room.addHook('afterDestroy', async (instance, options) => {
+  await BookedRoom.destroy({
+    where: {
+      room_id: instance.id,
+    },
+    truncate: true,
+  });
+});
+
 module.exports = db;

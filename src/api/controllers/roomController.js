@@ -26,3 +26,15 @@ exports.addRoom = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.deleteRoom = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    await RoomServices.deleteRoom(id);
+
+    res.status(201).json(new Response('Room has been deleted successfully'));
+  } catch (err) {
+    next(err);
+  }
+};
