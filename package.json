@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./src/app.js",
-    "start:dev": "nodemon ./src/app.js"
+    "start:dev": "nodemon ./src/app.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -30,12 +31,14 @@
     "sequelize": "^6.7.0"
   },
   "devDependencies": {
+    "axios": "^0.24.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.4.7",
     "nodemon": "^2.0.13",
     "prettier": "^2.4.1"
   }
