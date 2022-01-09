@@ -125,12 +125,4 @@ Hotel.addHook('afterDestroy', async (instance, options) => {
   });
 });
 
-Room.addHook('afterDestroy', async (instance, options) => {
-  await BookedRoom.destroy({
-    where: {
-      room_id: instance.id,
-    },
-  });
-});
-
 module.exports = db;

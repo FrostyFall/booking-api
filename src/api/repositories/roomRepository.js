@@ -1,5 +1,5 @@
 const { unlink } = require('fs/promises');
-const { Room } = require('../models');
+const { Room, BookedRoom } = require('../models');
 const db = require('../../config/DBConnection');
 const AppError = require('../../utils/appError');
 
@@ -57,6 +57,12 @@ exports.deleteById = async ({ id, img }) => {
     if (img !== null) {
       await unlink(img);
     }
+
+    await BookedRoom.destroy({
+      where: {
+        room_id: id,
+      },
+    });
 
     await t.commit();
   } catch (error) {
