@@ -115,14 +115,4 @@ Role.hasMany(UsersRoles, {
   sourceKey: 'id',
 });
 
-// Hooks
-Hotel.addHook('afterDestroy', async (instance, options) => {
-  await Room.destroy({
-    where: {
-      hotel_id: instance.id,
-    },
-    truncate: true,
-  });
-});
-
 module.exports = db;

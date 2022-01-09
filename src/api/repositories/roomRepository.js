@@ -41,7 +41,8 @@ exports.createOne = async ({ hotelID, img = null, type, cost }) => {
   return result;
 };
 
-exports.deleteById = async ({ id, img }) => {
+exports.deleteById = async (id) => {
+  const { img } = await this.findById(id);
   const t = await db.transaction();
   let result;
 

@@ -24,13 +24,11 @@ exports.addHotel = async ({ title, description }) => {
 };
 
 exports.deleteHotel = async (hotelID) => {
-  const hotel = await this.getHotel(hotelID);
-
-  if (!hotel) {
+  if (!(await this.getHotel(hotelID))) {
     throw new AppError('Specified hotel not found', 400);
   }
 
-  return await HotelRepo.deleteById({ id: hotelID, img: hotel.img });
+  return await HotelRepo.deleteById(hotelID);
 };
 
 exports.getHotels = async ({ page, amount }) => {
