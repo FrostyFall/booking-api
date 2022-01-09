@@ -33,9 +33,11 @@ exports.getRoom = async (roomID) => {
 };
 
 exports.deleteRoom = async (roomID) => {
-  if (!(await this.getRoom(roomID))) {
+  const room = await this.getRoom(roomID);
+
+  if (!room) {
     throw new AppError('Specified room not found', 400);
   }
 
-  return await RoomRepo.deleteById(roomID);
+  return await RoomRepo.deleteById({ id: roomID, img: room.img });
 };
