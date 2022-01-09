@@ -117,22 +117,6 @@ Role.hasMany(UsersRoles, {
 
 // Hooks
 Hotel.addHook('afterDestroy', async (instance, options) => {
-  // if (instance.img !== null) {
-  //   await unlink(instance.img);
-  // }
-
-  // const relatedRooms = await Room.findAll({
-  //   where: {
-  //     hotel_id: instance.id,
-  //   },
-  // });
-
-  // relatedRooms.forEach(async (room) => {
-  //   if (room.img !== null) {
-  //     await unlink(room.img);
-  //   }
-  // });
-
   await Room.destroy({
     where: {
       hotel_id: instance.id,
