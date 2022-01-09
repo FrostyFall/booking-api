@@ -24,7 +24,7 @@ exports.addHotel = async ({ title, description }) => {
 };
 
 exports.deleteHotel = async (hotelID) => {
-  if (!(await this.getHotel(hotelID)).hotel) {
+  if (!(await this.getHotel(hotelID))) {
     throw new AppError('Specified hotel not found', 400);
   }
 
@@ -46,13 +46,13 @@ exports.getHotel = async (hotelID) => {
     throw new AppError('Specified hotel not found', 400);
   }
 
-  return { hotel };
+  return hotel;
 };
 
 exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
   const options = pagination({ page, amount });
 
-  if (!(await this.getHotel(hotelID)).hotel) {
+  if (!(await this.getHotel(hotelID))) {
     throw new AppError('Specified hotel not found', 400);
   }
 
@@ -72,7 +72,7 @@ exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
 };
 
 exports.addReview = async ({ hotelID, userID, review, stars }) => {
-  if (!(await this.getHotel(hotelID)).hotel) {
+  if (!(await this.getHotel(hotelID))) {
     throw new AppError('Specified hotel not found', 400);
   }
 
@@ -80,7 +80,7 @@ exports.addReview = async ({ hotelID, userID, review, stars }) => {
 };
 
 exports.getReviews = async ({ id: hotelID, page, amount }) => {
-  if (!(await this.getHotel(hotelID)).hotel) {
+  if (!(await this.getHotel(hotelID))) {
     throw new AppError('Specified hotel not found', 400);
   }
 

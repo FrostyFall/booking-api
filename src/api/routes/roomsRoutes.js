@@ -20,4 +20,6 @@ router
   .route('/')
   .post(authorize('admin'), validate(addRoomSchema), controller.addRoom);
 
+router.route('/:id').delete(authorize('admin'), controller.deleteRoom);
+
 module.exports = router;
