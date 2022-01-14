@@ -10,5 +10,5 @@ exports.addHotelSchema = object.keys({
 
 exports.addReviewSchema = object.keys({
   review: string.max(100).required(),
-  stars: number.min(0).max(5).required(),
+  rating: number.min(0).max(5).required(),
 });
