@@ -4,6 +4,12 @@ const RoomRepo = require('./roomRepository');
 const db = require('../../config/DBConnection');
 const AppError = require('../../utils/appError');
 
+exports.updateImgById = async ({ id, path }) => {
+  const result = await Hotel.update({ img: './' + path }, { where: { id } });
+
+  return result;
+};
+
 exports.createOne = async ({ title, description, img = null }) => {
   const result = await Hotel.create({
     img,

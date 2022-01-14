@@ -83,9 +83,9 @@ exports.addReview = async (req, res, next) => {
   try {
     const { id: hotelID } = req.params;
     const { id: userID } = req.user;
-    const { review, stars } = req.body;
+    const { review, rating } = req.body;
 
-    await HotelServices.addReview({ hotelID, userID, review, stars });
+    await HotelServices.addReview({ hotelID, userID, review, rating });
 
     res.status(201).json(new Response('Review has been added successfully'));
   } catch (err) {

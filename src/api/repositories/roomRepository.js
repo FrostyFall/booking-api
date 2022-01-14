@@ -35,8 +35,8 @@ exports.findById = async (id) => {
   return result;
 };
 
-exports.createOne = async ({ hotelID, img = null, type, cost }) => {
-  const result = await Room.create({ hotel_id: hotelID, img, type, cost });
+exports.createOne = async ({ hotelID, img = null, rating, cost }) => {
+  const result = await Room.create({ hotel_id: hotelID, img, rating, cost });
 
   return result;
 };

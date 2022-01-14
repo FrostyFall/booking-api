@@ -5,7 +5,7 @@ const { object, string, number } = Joi.types();
 exports.addHotelSchema = object.keys({
   img: string.required().allow(null),
   title: string.min(4).required(),
-  description: string.min(12).required(),
+  description: string.min(8).required(),
 });
 
 exports.addReviewSchema = object.keys({

@@ -12,9 +12,7 @@ exports.uploadHotelImage = async ({ id, files }) => {
 
   const { path } = files[0];
 
-  const hotel = await HotelRepo.findById(id);
-
-  await hotel.update({ img: './' + path });
+  const hotel = await HotelRepo.updateImgById({ id, path });
 
   return { hotel };
 };
@@ -58,7 +56,9 @@ exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
 
   const hotelRooms = await RoomRepo.findByHotelId(hotelID);
   const hotelRoomsIDs = hotelRooms.map((room) => room.id);
-  const hotelBookedRooms = await BookedRoomRepo.findByRoomId(hotelRoomsIDs);
+  const hotelBookedRooms = await BookedRoomRepo.findActiveOrCancelledRooms(
+    hotelRoomsIDs
+  );
   const hotelBookedRoomsIDs = hotelBookedRooms.map((room) => room.room_id);
   const freeRoomsIDs = hotelRoomsIDs.filter(
     (roomID) => !hotelBookedRoomsIDs.includes(roomID)
@@ -71,12 +71,12 @@ exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
   return { freeRooms };
 };
 
-exports.addReview = async ({ hotelID, userID, review, stars }) => {
+exports.addReview = async ({ hotelID, userID, review, rating }) => {
   if (!(await this.getHotel(hotelID))) {
     throw new AppError('Specified hotel not found', 400);
   }
 
-  return await HotelReviewRepo.createOne({ hotelID, userID, review, stars });
+  return await HotelReviewRepo.createOne({ hotelID, userID, review, rating });
 };
 
 exports.getReviews = async ({ id: hotelID, page, amount }) => {

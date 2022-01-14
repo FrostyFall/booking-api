@@ -17,9 +17,9 @@ exports.uploadRoomImage = async (req, res, next) => {
 
 exports.addRoom = async (req, res, next) => {
   try {
-    const { hotelID, type, cost } = req.body;
+    const { hotelID, rating, cost } = req.body;
 
-    await RoomServices.addRoom({ hotelID, type, cost });
+    await RoomServices.addRoom({ hotelID, rating, cost });
 
     res.status(201).json(new Response('Room has been added successfully'));
   } catch (err) {
