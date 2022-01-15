@@ -9,3 +9,14 @@ exports.findByUserId = async (id) => {
 
   return result;
 };
+
+exports.transactionDeleteByUserId = async ({ userId, t }) => {
+  const result = await UsersRoles.destroy({
+    where: {
+      user_id: userId,
+    },
+    transaction: t,
+  });
+
+  return result;
+};

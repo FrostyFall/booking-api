@@ -1,7 +1,4 @@
-const { unlink } = require('fs/promises');
-const { Room, BookedRoom } = require('../models');
-const db = require('../../config/DBConnection');
-const AppError = require('../../utils/appError');
+const { Room } = require('../models');
 
 exports.findByHotelId = async (hotelID) => {
   const result = await Room.findAll({
@@ -48,39 +45,6 @@ exports.transactionDelete = async ({ id, t }) => {
     },
     transaction: t,
   });
-
-  return result;
-};
-
-exports.deleteById = async (id) => {
-  const { img } = await this.findById(id);
-  const t = await db.transaction();
-  let result;
-
-  try {
-    result = await Room.destroy({
-      where: {
-        id,
-      },
-      individualHooks: true,
-      transaction: t,
-    });
-
-    if (img !== null) {
-      await unlink(img);
-    }
-
-    await BookedRoom.destroy({
-      where: {
-        room_id: id,
-      },
-    });
-
-    await t.commit();
-  } catch (error) {
-    await t.rollback();
-    throw new AppError('Error occured while deleting the room', 500);
-  }
 
   return result;
 };

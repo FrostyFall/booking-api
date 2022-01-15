@@ -45,8 +45,11 @@ exports.deleteHotel = async (id) => {
       await RoomRepo.transactionDelete({ id: roomID, t });
     });
 
-    await BookedRoomRepo.transactionDelete({ roomId: hotelRoomsIDs, t });
-    await HotelReviewRepo.transactionDelete({ hotelId: id, t });
+    await BookedRoomRepo.transactionDeleteByRoomId({
+      roomId: hotelRoomsIDs,
+      t,
+    });
+    await HotelReviewRepo.transactionDeleteByHotelId({ hotelId: id, t });
 
     await t.commit();
   } catch (error) {

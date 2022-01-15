@@ -51,7 +51,7 @@ exports.deleteRoom = async (id) => {
       await unlink(img);
     }
 
-    await BookedRoomRepo.transactionDelete({ roomId: id, t });
+    await BookedRoomRepo.transactionDeleteByRoomId({ roomId: id, t });
 
     await t.commit();
   } catch (error) {

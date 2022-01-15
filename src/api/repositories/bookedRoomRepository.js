@@ -86,10 +86,21 @@ exports.findById = async (id) => {
   return result;
 };
 
-exports.transactionDelete = async ({ roomId, t }) => {
+exports.transactionDeleteByRoomId = async ({ roomId, t }) => {
   const result = await BookedRoom.destroy({
     where: {
       room_id: roomId,
+    },
+    transaction: t,
+  });
+
+  return result;
+};
+
+exports.transactionDeleteByUserId = async ({ userId, t }) => {
+  const result = await BookedRoom.destroy({
+    where: {
+      user_id: userId,
     },
     transaction: t,
   });

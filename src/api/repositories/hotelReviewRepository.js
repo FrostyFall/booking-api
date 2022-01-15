@@ -1,6 +1,17 @@
 const { HotelReview } = require('../models');
 
-exports.transactionDelete = async ({ hotelId, t }) => {
+exports.transactionDeleteByUserId = async ({ userId, t }) => {
+  const result = await HotelReview.destroy({
+    where: {
+      user_id: userId,
+    },
+    transaction: t,
+  });
+
+  return result;
+};
+
+exports.transactionDeleteByHotelId = async ({ hotelId, t }) => {
   const result = await HotelReview.destroy({
     where: {
       hotel_id: hotelId,
