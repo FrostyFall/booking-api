@@ -11,6 +11,7 @@ const hotelsRouter = require('./api/routes/hotelsRoutes');
 const roomsRouter = require('./api/routes/roomsRoutes');
 const bookedRoomsRouter = require('./api/routes/bookedRoomsRoutes');
 const usersRouter = require('./api/routes/usersRoutes');
+const analyticsRouter = require('./api/routes/analyticsRoutes');
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -23,6 +24,7 @@ app.use('/hotels', passportAuth, hotelsRouter);
 app.use('/rooms', passportAuth, roomsRouter);
 app.use('/booked-rooms', passportAuth, bookedRoomsRouter);
 app.use('/users', passportAuth, usersRouter);
+app.use('/analytics', passportAuth, analyticsRouter);
 
 app.use((req, res, next) => {
   next(new AppError('Unknown path', 404));
