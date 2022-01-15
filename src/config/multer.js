@@ -68,9 +68,10 @@ const fileFilter = (req, file, cb) => {
   cb(null, true);
 };
 
+const maxImageSizeMb = process.env.MAX_IMAGE_SIZE_MB ?? 2;
 const limits = {
   files: 1,
-  fileSize: 1024 * 1024 * parseInt(process.env.MAX_IMAGE_SIZE_MB, 10),
+  fileSize: 1024 * 1024 * parseInt(maxImageSizeMb, 10),
 };
 
 const upload = multer({ storage, fileFilter, limits });

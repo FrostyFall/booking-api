@@ -16,7 +16,7 @@ exports.deleteSelf = catchAsync(async (req, res) => {
 
   await UserServices.deleteSelf({ userId, authUserId });
 
-  res.status(200).json(new Response('User has been deleted'));
+  res.status(200).json(new Response('Your account has been deleted'));
 });
 
 exports.getUserBookings = catchAsync(async (req, res) => {
