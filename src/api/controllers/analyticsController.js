@@ -1,17 +1,14 @@
 const AnalyticsServices = require('../services/analyticsServices');
 const Response = require('../../utils/response');
+const catchAsync = require('../../utils/catchAsync');
 
-exports.getMostBookedHotel = async (req, res, next) => {
-  try {
-    const { month, room_rating: roomRating } = req.query;
+exports.getMostBookedHotel = catchAsync(async (req, res) => {
+  const { month, room_rating: roomRating } = req.query;
 
-    const result = await AnalyticsServices.getMostBookedHotel({
-      month,
-      roomRating,
-    });
+  const result = await AnalyticsServices.getMostBookedHotel({
+    month,
+    roomRating,
+  });
 
-    res.status(200).json(new Response(null, result));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response(null, result));
+});
