@@ -1,8 +1,10 @@
+const { unlink } = require('fs/promises');
 const HotelRepo = require('../repositories/hotelRepository');
 const RoomRepo = require('../repositories/roomRepository');
 const BookedRoomRepo = require('../repositories/bookedRoomRepository');
 const HotelReviewRepo = require('../repositories/hotelReviewRepository');
 const AppError = require('../../utils/appError');
+const db = require('../../config/DBConnection');
 const pagination = require('../../utils/pagination');
 
 exports.uploadHotelImage = async ({ id, files }) => {
@@ -12,9 +14,7 @@ exports.uploadHotelImage = async ({ id, files }) => {
 
   const { path } = files[0];
 
-  const hotel = await HotelRepo.findById(id);
-
-  await hotel.update({ img: './' + path });
+  const hotel = await HotelRepo.updateImgById({ id, path });
 
   return { hotel };
 };
@@ -23,12 +23,41 @@ exports.addHotel = async ({ title, description }) => {
   return await HotelRepo.createOne({ title, description });
 };
 
-exports.deleteHotel = async (hotelID) => {
-  if (!(await this.getHotel(hotelID))) {
+exports.deleteHotel = async (id) => {
+  if (!(await this.getHotel(id))) {
     throw new AppError('Specified hotel not found', 400);
   }
 
-  return await HotelRepo.deleteById(hotelID);
+  const { img } = await HotelRepo.findById(id);
+  const t = await db.transaction();
+  let result;
+
+  try {
+    result = await HotelRepo.transactionDelete({ id, t });
+
+    if (img !== null) {
+      await unlink(img);
+    }
+
+    const hotelRooms = await RoomRepo.findByHotelId(id);
+    const hotelRoomsIDs = hotelRooms.map((room) => room.id);
+    hotelRoomsIDs.forEach(async (roomID) => {
+      await RoomRepo.transactionDelete({ id: roomID, t });
+    });
+
+    await BookedRoomRepo.transactionDeleteByRoomId({
+      roomId: hotelRoomsIDs,
+      t,
+    });
+    await HotelReviewRepo.transactionDeleteByHotelId({ hotelId: id, t });
+
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    throw new AppError('Error occured while deleting the hotel', 500);
+  }
+
+  return result;
 };
 
 exports.getHotels = async ({ page, amount }) => {
@@ -58,7 +87,9 @@ exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
 
   const hotelRooms = await RoomRepo.findByHotelId(hotelID);
   const hotelRoomsIDs = hotelRooms.map((room) => room.id);
-  const hotelBookedRooms = await BookedRoomRepo.findByRoomId(hotelRoomsIDs);
+  const hotelBookedRooms = await BookedRoomRepo.findActiveOrCancelledRooms(
+    hotelRoomsIDs
+  );
   const hotelBookedRoomsIDs = hotelBookedRooms.map((room) => room.room_id);
   const freeRoomsIDs = hotelRoomsIDs.filter(
     (roomID) => !hotelBookedRoomsIDs.includes(roomID)
@@ -71,12 +102,12 @@ exports.getHotelFreeRooms = async ({ page, amount, hotelID }) => {
   return { freeRooms };
 };
 
-exports.addReview = async ({ hotelID, userID, review, stars }) => {
+exports.addReview = async ({ hotelID, userID, review, rating }) => {
   if (!(await this.getHotel(hotelID))) {
     throw new AppError('Specified hotel not found', 400);
   }
 
-  return await HotelReviewRepo.createOne({ hotelID, userID, review, stars });
+  return await HotelReviewRepo.createOne({ hotelID, userID, review, rating });
 };
 
 exports.getReviews = async ({ id: hotelID, page, amount }) => {

@@ -1,4 +1,33 @@
+const { Op } = require('sequelize');
 const { BookedRoom } = require('../models');
+
+exports.findActiveOrCancelledRooms = async (roomId) => {
+  const currentDate = new Date();
+
+  const result = await BookedRoom.findAll({
+    where: {
+      room_id: roomId,
+      [Op.not]: [
+        {
+          [Op.or]: [
+            {
+              leave_date: {
+                [Op.lt]: currentDate,
+              },
+            },
+            {
+              is_cancelled: {
+                [Op.eq]: true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  return result;
+};
 
 exports.findByRoomId = async (roomID) => {
   const result = await BookedRoom.findAll({
@@ -32,17 +61,17 @@ exports.createOne = async ({ roomID, userID, bookedDate, leaveDate }) => {
     user_id: userID,
     booked_date: bookedDate,
     leave_date: leaveDate,
+    is_cancelled: false,
   });
 
   return result;
 };
 
-exports.deleteById = async (id) => {
-  const result = await BookedRoom.destroy({
-    where: {
-      id,
-    },
-  });
+exports.cancelById = async (id) => {
+  const result = await BookedRoom.update(
+    { is_cancelled: 1 },
+    { where: { id } }
+  );
 
   return result;
 };
@@ -52,6 +81,28 @@ exports.findById = async (id) => {
     where: {
       id,
     },
+  });
+
+  return result;
+};
+
+exports.transactionDeleteByRoomId = async ({ roomId, t }) => {
+  const result = await BookedRoom.destroy({
+    where: {
+      room_id: roomId,
+    },
+    transaction: t,
+  });
+
+  return result;
+};
+
+exports.transactionDeleteByUserId = async ({ userId, t }) => {
+  const result = await BookedRoom.destroy({
+    where: {
+      user_id: userId,
+    },
+    transaction: t,
   });
 
   return result;

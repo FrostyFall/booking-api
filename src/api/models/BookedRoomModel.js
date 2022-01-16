@@ -15,6 +15,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      is_cancelled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: 0,
+      },
     },
     {
       tableName: 'booked_rooms',

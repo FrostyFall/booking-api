@@ -52,12 +52,13 @@ exports.createOne = async ({
   };
 };
 
-exports.deleteById = async (id) => {
-  const deletedUser = await User.destroy({
+exports.transactionDelete = async ({ id, t }) => {
+  const result = await User.destroy({
     where: {
       id,
     },
+    transaction: t,
   });
 
-  return deletedUser;
+  return result;
 };
