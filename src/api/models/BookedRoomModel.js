@@ -7,7 +7,7 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true,
       },
-      booked_date: {
+      move_in_date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
