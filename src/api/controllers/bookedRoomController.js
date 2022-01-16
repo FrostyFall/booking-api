@@ -3,13 +3,13 @@ const Response = require('../../utils/response');
 const catchAsync = require('../../utils/catchAsync');
 
 exports.bookRoom = catchAsync(async (req, res) => {
-  const { roomID, bookedDate, leaveDate } = req.body;
+  const { roomID, moveInDate, leaveDate } = req.body;
   const userID = parseInt(req.user.id, 10);
 
   await BookedRoomServices.bookRoom({
     roomID,
     userID,
-    bookedDate,
+    moveInDate,
     leaveDate,
   });
 

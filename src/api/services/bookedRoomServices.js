@@ -39,7 +39,7 @@ exports.getBookingById = async (id) => {
   return booking;
 };
 
-exports.bookRoom = async ({ roomID, userID, bookedDate, leaveDate }) => {
+exports.bookRoom = async ({ roomID, userID, moveInDate, leaveDate }) => {
   if (!(await RoomServices.getRoom(roomID))) {
     throw new AppError('Specified room not found', 400);
   }
@@ -48,10 +48,14 @@ exports.bookRoom = async ({ roomID, userID, bookedDate, leaveDate }) => {
     throw new AppError('This room has already been booked', 400);
   }
 
+  if (new Date(moveInDate).getTime() - new Date().getTime() < 0) {
+    throw new AppError('Invalid move in date', 400);
+  }
+
   return await BookedRoomRepo.createOne({
     roomID,
     userID,
-    bookedDate,
+    moveInDate,
     leaveDate,
   });
 };
@@ -60,11 +64,25 @@ exports.cancelBooking = async ({ bookingID, userID, userRole }) => {
   const booking = await this.getBookingById(bookingID);
 
   if (!booking || booking.is_cancelled) {
-    throw new AppError('Specified booking is not found', 400);
+    throw new AppError("Specified booking doesn't exist or is not active", 400);
   }
 
   if (userRole === 'user' && booking.user_id !== parseInt(userID, 10)) {
     throw new AppError('You have no permission to delete this booking', 403);
+  }
+
+  const datesDifferenceInMs =
+    new Date(booking.move_in_date).getTime() - new Date().getTime();
+  const daysBeforeMovingIn = parseInt(
+    Math.floor(datesDifferenceInMs / (1000 * 60 * 60 * 24)),
+    10
+  );
+
+  if (daysBeforeMovingIn < 5) {
+    throw new AppError(
+      "You cannot cancel this booking. It's less than 5 days until moving in",
+      400
+    );
   }
 
   return await BookedRoomRepo.cancelById(bookingID);

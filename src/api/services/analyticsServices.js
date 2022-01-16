@@ -15,7 +15,7 @@ exports.getMostBookedHotel = async ({ month, roomRating = 0 }) => {
   const ratingNum = parseFloat(roomRating, 10);
 
   const suitedBookedRooms = await sequelize.query(
-    'SELECT bks.id, bks.booked_date, bks.leave_date, bks.is_cancelled, rooms.id, rooms.img, rooms.rating, rooms.cost, rooms.hotel_id FROM booked_rooms AS bks INNER JOIN rooms WHERE month(bks.booked_date) = :month AND rooms.rating > :rating AND bks.room_id = rooms.id;',
+    'SELECT bks.id, bks.move_in_date, bks.leave_date, bks.is_cancelled, rooms.id, rooms.img, rooms.rating, rooms.cost, rooms.hotel_id FROM booked_rooms AS bks INNER JOIN rooms WHERE month(bks.created_at) = :month AND rooms.rating > :rating AND bks.room_id = rooms.id;',
     {
       type: QueryTypes.SELECT,
       replacements: { month: monthNum, rating: ratingNum },

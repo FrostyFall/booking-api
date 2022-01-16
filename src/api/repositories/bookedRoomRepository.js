@@ -55,11 +55,11 @@ exports.findAll = async ({ limit, offset }) => {
   return result;
 };
 
-exports.createOne = async ({ roomID, userID, bookedDate, leaveDate }) => {
+exports.createOne = async ({ roomID, userID, moveInDate, leaveDate }) => {
   const result = await BookedRoom.create({
     room_id: roomID,
     user_id: userID,
-    booked_date: bookedDate,
+    move_in_date: moveInDate,
     leave_date: leaveDate,
     is_cancelled: false,
   });
