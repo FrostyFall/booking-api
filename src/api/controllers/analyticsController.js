@@ -12,3 +12,9 @@ exports.getMostBookedHotel = catchAsync(async (req, res) => {
 
   res.status(200).json(new Response(null, result));
 });
+
+exports.getUsersWithMostBookings = catchAsync(async (req, res) => {
+  const result = await AnalyticsServices.getUsersWithMostBookings();
+
+  res.status(200).json(new Response(null, result));
+});

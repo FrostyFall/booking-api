@@ -53,3 +53,39 @@ exports.getMostBookedHotel = async ({ month, roomRating = 0 }) => {
 
   return { hotel: hotel[0] };
 };
+
+exports.getUsersWithMostBookings = async () => {
+  const usersTotalBookings = await sequelize.query(
+    'SELECT bks.user_id, COUNT(bks.user_id) AS total_booked_rooms FROM users INNER JOIN booked_rooms AS bks ON users.id = bks.user_id GROUP BY user_id ORDER BY total_booked_rooms DESC;',
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+
+  const usersAverageBooking =
+    usersTotalBookings.reduce(
+      (acc, current) => acc + current.total_booked_rooms,
+      0
+    ) / usersTotalBookings.length;
+
+  const requiredUsersIds = usersTotalBookings
+    .filter(
+      ({ total_booked_rooms: total }) =>
+        total >= 2 && total >= usersAverageBooking
+    )
+    .map((user) => user.user_id);
+
+  if (requiredUsersIds.length === 0) {
+    return null;
+  }
+
+  const requiredUsers = await sequelize.query(
+    'SELECT users.id, users.email, users.password, users.created_at, users.deleted_at, COUNT(bks.user_id) AS total_booked_rooms FROM users INNER JOIN booked_rooms AS bks ON users.id = bks.user_id AND users.id IN (:ids) GROUP BY user_id ORDER BY total_booked_rooms DESC;',
+    {
+      type: QueryTypes.SELECT,
+      replacements: { ids: requiredUsersIds },
+    }
+  );
+
+  return { users: requiredUsers };
+};
