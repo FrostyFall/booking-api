@@ -1,51 +1,33 @@
 const UserServices = require('../services/userServices');
 const BookedRoomServices = require('../services/bookedRoomServices');
-const AppError = require('../../utils/appError');
 const Response = require('../../utils/response');
+const catchAsync = require('../../utils/catchAsync');
 
-exports.getUsers = async (req, res, next) => {
-  try {
-    const { page, amount } = req.query;
-    const fetchedUsers = await UserServices.getUsers({ page, amount });
+exports.getUsers = catchAsync(async (req, res) => {
+  const { page, amount } = req.query;
+  const fetchedUsers = await UserServices.getUsers({ page, amount });
 
-    res.status(200).json(new Response(null, fetchedUsers));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response(null, fetchedUsers));
+});
 
-exports.deleteSelf = async (req, res, next) => {
-  try {
-    const userID = parseInt(req.params.id, 10);
-    const authUserID = req.user.id;
+exports.deleteSelf = catchAsync(async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+  const authUserId = req.user.id;
 
-    if (userID !== authUserID) {
-      return next(
-        new AppError('You have no permission to delete this user', 403)
-      );
-    }
+  await UserServices.deleteSelf({ userId, authUserId });
 
-    await UserServices.deleteUser(userID);
+  res.status(200).json(new Response('Your account has been deleted'));
+});
 
-    res.status(200).json(new Response('User has been deleted'));
-  } catch (err) {
-    next(err);
-  }
-};
+exports.getUserBookings = catchAsync(async (req, res) => {
+  const targetUserID = parseInt(req.params.id, 10);
+  const { id: userID, role: userRole } = req.user;
 
-exports.getUserBookings = async (req, res, next) => {
-  try {
-    const targetUserID = parseInt(req.params.id, 10);
-    const { id: userID, role: userRole } = req.user;
+  const fetchedUserBookings = await BookedRoomServices.getUserBookings({
+    targetUserID,
+    userID,
+    userRole,
+  });
 
-    const fetchedUserBookings = await BookedRoomServices.getUserBookings({
-      targetUserID,
-      userID,
-      userRole,
-    });
-
-    res.status(200).json(new Response(null, fetchedUserBookings));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response(null, fetchedUserBookings));
+});

@@ -1,107 +1,76 @@
 const HotelServices = require('../services/hotelServices');
 const Response = require('../../utils/response');
+const catchAsync = require('../../utils/catchAsync');
 
-exports.uploadHotelImage = async (req, res, next) => {
-  try {
-    const { id } = req.params;
+exports.uploadHotelImage = catchAsync(async (req, res) => {
+  const { id } = req.params;
 
-    await HotelServices.uploadHotelImage({ id, files: req.files });
+  await HotelServices.uploadHotelImage({ id, files: req.files });
 
-    res
-      .status(201)
-      .json(new Response('Hotel image has been uploaded successfully'));
-  } catch (err) {
-    next(err);
-  }
-};
+  res
+    .status(201)
+    .json(new Response('Hotel image has been uploaded successfully'));
+});
 
-exports.addHotel = async (req, res, next) => {
-  try {
-    const { title, description } = req.body;
+exports.addHotel = catchAsync(async (req, res) => {
+  const { title, description } = req.body;
 
-    await HotelServices.addHotel({ title, description });
+  await HotelServices.addHotel({ title, description });
 
-    res.status(201).json(new Response('Hotel has been added successfully'));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(201).json(new Response('Hotel has been added successfully'));
+});
 
-exports.deleteHotel = async (req, res, next) => {
-  try {
-    const { id } = req.params;
+exports.deleteHotel = catchAsync(async (req, res) => {
+  const { id } = req.params;
 
-    await HotelServices.deleteHotel(id);
+  await HotelServices.deleteHotel(id);
 
-    res.status(200).json(new Response('Hotel has been deleted successfully'));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response('Hotel has been deleted successfully'));
+});
 
-exports.getHotels = async (req, res, next) => {
-  try {
-    const { page, amount } = req.query;
-    const fetchedHotels = await HotelServices.getHotels({ page, amount });
+exports.getHotels = catchAsync(async (req, res) => {
+  const { page, amount } = req.query;
+  const fetchedHotels = await HotelServices.getHotels({ page, amount });
 
-    res.status(200).json(new Response(null, fetchedHotels));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response(null, fetchedHotels));
+});
 
-exports.getHotel = async (req, res, next) => {
-  try {
-    const { id } = req.params;
+exports.getHotel = catchAsync(async (req, res) => {
+  const { id } = req.params;
 
-    const fetchedHotel = await HotelServices.getHotel(id);
+  const fetchedHotel = await HotelServices.getHotel(id);
 
-    res.status(200).json(new Response(null, fetchedHotel));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response(null, fetchedHotel));
+});
 
-exports.getHotelFreeRooms = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { page, amount } = req.query;
+exports.getHotelFreeRooms = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { page, amount } = req.query;
 
-    const fetchedFreeRooms = await HotelServices.getHotelFreeRooms({
-      page,
-      amount,
-      hotelID: id,
-    });
+  const fetchedFreeRooms = await HotelServices.getHotelFreeRooms({
+    page,
+    amount,
+    hotelID: id,
+  });
 
-    res.status(200).json(new Response(null, fetchedFreeRooms));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response(null, fetchedFreeRooms));
+});
 
-exports.addReview = async (req, res, next) => {
-  try {
-    const { id: hotelID } = req.params;
-    const { id: userID } = req.user;
-    const { review, stars } = req.body;
+exports.addReview = catchAsync(async (req, res) => {
+  const { id: hotelID } = req.params;
+  const { id: userID } = req.user;
+  const { review, rating } = req.body;
 
-    await HotelServices.addReview({ hotelID, userID, review, stars });
+  await HotelServices.addReview({ hotelID, userID, review, rating });
 
-    res.status(201).json(new Response('Review has been added successfully'));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(201).json(new Response('Review has been added successfully'));
+});
 
-exports.getReviews = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { page, amount } = req.query;
+exports.getReviews = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { page, amount } = req.query;
 
-    const fetchedReviews = await HotelServices.getReviews({ id, page, amount });
+  const fetchedReviews = await HotelServices.getReviews({ id, page, amount });
 
-    res.status(200).json(new Response(null, fetchedReviews));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(200).json(new Response(null, fetchedReviews));
+});

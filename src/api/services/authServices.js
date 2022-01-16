@@ -17,17 +17,17 @@ exports.signup = async ({
   role,
 }) => {
   if ((await UserServices.getUserByEmail(email)).user) {
-    throw new AppError('This user already exists');
+    throw new AppError('This user already exists', 400);
   }
 
   const roleID = await findRoleID(role);
 
   if (roleID === -1) {
-    throw new AppError('Invalid user role');
+    throw new AppError('Invalid user role', 400);
   }
 
   if (password !== passwordConfirm) {
-    throw new AppError('Invalid password confirmation');
+    throw new AppError('Invalid password confirmation', 400);
   }
 
   const hashedPass = await hashPassword(password);

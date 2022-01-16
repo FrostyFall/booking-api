@@ -14,9 +14,9 @@ const options = {
 passport.use(
   new JWTStrategy(options, async (payload, done) => {
     try {
-      const userID = payload.sub;
+      const userId = payload.sub;
 
-      const user = await UsersRepo.findById(userID);
+      const user = await UsersRepo.findById(userId);
 
       if (!user) {
         return done(null, false);

@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const { Sequelize, DataTypes } = require('sequelize');
-// const { unlink } = require('fs/promises');
 const sequelize = require('../../config/DBConnection');
 
 const filebasename = path.basename(__filename);

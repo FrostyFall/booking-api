@@ -1,34 +1,27 @@
 const AuthServices = require('../services/authServices');
 const Response = require('../../utils/response');
+const catchAsync = require('../../utils/catchAsync');
 
-exports.signup = async (req, res, next) => {
-  try {
-    const { email, password, passwordConfirm, firstName, lastName, role } =
-      req.body;
+exports.signup = catchAsync(async (req, res) => {
+  const { email, password, passwordConfirm, firstName, lastName, role } =
+    req.body;
 
-    const result = await AuthServices.signup({
-      email,
-      password,
-      passwordConfirm,
-      firstName,
-      lastName,
-      role,
-    });
+  const result = await AuthServices.signup({
+    email,
+    password,
+    passwordConfirm,
+    firstName,
+    lastName,
+    role,
+  });
 
-    res.status(201).json(new Response(null, result));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(201).json(new Response(null, result));
+});
 
-exports.login = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
+exports.login = catchAsync(async (req, res) => {
+  const { email, password } = req.body;
 
-    const result = await AuthServices.login({ email, password });
+  const result = await AuthServices.login({ email, password });
 
-    res.status(201).json(new Response('User has been logged in', result));
-  } catch (err) {
-    next(err);
-  }
-};
+  res.status(201).json(new Response('User has been logged in', result));
+});

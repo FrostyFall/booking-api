@@ -44,7 +44,7 @@ exports.bookRoom = async ({ roomID, userID, bookedDate, leaveDate }) => {
     throw new AppError('Specified room not found', 400);
   }
 
-  if ((await this.getRoomBookings(roomID)).length > 0) {
+  if ((await BookedRoomRepo.findActiveOrCancelledRooms(roomID)).length !== 0) {
     throw new AppError('This room has already been booked', 400);
   }
 
@@ -59,7 +59,7 @@ exports.bookRoom = async ({ roomID, userID, bookedDate, leaveDate }) => {
 exports.cancelBooking = async ({ bookingID, userID, userRole }) => {
   const booking = await this.getBookingById(bookingID);
 
-  if (!booking) {
+  if (!booking || booking.is_cancelled) {
     throw new AppError('Specified booking is not found', 400);
   }
 
@@ -67,5 +67,5 @@ exports.cancelBooking = async ({ bookingID, userID, userRole }) => {
     throw new AppError('You have no permission to delete this booking', 403);
   }
 
-  return await BookedRoomRepo.deleteById(bookingID);
+  return await BookedRoomRepo.cancelById(bookingID);
 };
