@@ -28,8 +28,18 @@ exports.transactionDelete = async ({ id, t }) => {
 };
 
 exports.findAll = async ({ limit, offset }) => {
-  // FIXME: Insert all fields in query methods
-  const result = await Hotel.findAll({ limit, offset });
+  const result = await Hotel.findAll({
+    limit,
+    offset,
+    attributes: [
+      'id',
+      'img',
+      'title',
+      'description',
+      'created_at',
+      'deleted_at',
+    ],
+  });
 
   return result;
 };
@@ -39,6 +49,14 @@ exports.findById = async (id) => {
     where: {
       id,
     },
+    attributes: [
+      'id',
+      'img',
+      'title',
+      'description',
+      'created_at',
+      'deleted_at',
+    ],
   });
 
   return result;

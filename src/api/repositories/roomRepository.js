@@ -5,6 +5,15 @@ exports.findByHotelId = async (hotelID) => {
     where: {
       hotel_id: hotelID,
     },
+    attributes: [
+      'id',
+      'img',
+      'rating',
+      'cost',
+      'created_at',
+      'deleted_at',
+      'hotel_id',
+    ],
   });
 
   return result;
@@ -17,6 +26,15 @@ exports.findByIds = async ({ freeRoomsIDs, limit, offset }) => {
     },
     limit,
     offset,
+    attributes: [
+      'id',
+      'img',
+      'rating',
+      'cost',
+      'created_at',
+      'deleted_at',
+      'hotel_id',
+    ],
   });
 
   return result;
@@ -27,6 +45,15 @@ exports.findById = async (id) => {
     where: {
       id,
     },
+    attributes: [
+      'id',
+      'img',
+      'rating',
+      'cost',
+      'created_at',
+      'deleted_at',
+      'hotel_id',
+    ],
   });
 
   return result;
