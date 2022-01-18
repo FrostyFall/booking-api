@@ -5,6 +5,7 @@ const UsersRolesRepo = require('../repositories/usersRolesRepository');
 const UserInfoRepo = require('../repositories/userInfoRepository');
 const RefreshTokenRepo = require('../repositories/refreshTokenRepository');
 const AppError = require('../../utils/appError');
+const Email = require('../../utils/email');
 const db = require('../../config/DBConnection');
 const pagination = require('../../utils/pagination');
 
@@ -17,7 +18,10 @@ exports.getUsers = async ({ page, amount }) => {
 };
 
 exports.deleteSelf = async ({ userId, authUserId }) => {
-  if (!(await this.getUserById(userId))) {
+  const user = await this.getUserById(userId);
+  const userInfo = await UserInfoRepo.findByUserId(userId);
+
+  if (!user) {
     throw new AppError("Specified user doesn't exist", 400);
   }
 
@@ -43,13 +47,19 @@ exports.deleteSelf = async ({ userId, authUserId }) => {
     throw new AppError('Error occured while deleting the room', 500);
   }
 
+  const mail = new Email(
+    user.email,
+    'Your account has been successfully deleted on Booking API.'
+  );
+  await mail.send('delete', { firstName: userInfo.first_name });
+
   return result;
 };
 
 exports.getUserById = async (userId) => {
   const user = await UserRepo.findById(userId);
 
-  return { user };
+  return user;
 };
 
 exports.getUserByEmail = async (email) => {

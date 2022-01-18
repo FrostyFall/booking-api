@@ -61,7 +61,7 @@ exports.signup = async ({
     email,
     'You have successfully signed up on Booking API.'
   );
-  await mail.send('signup', { firstName, lastName });
+  await mail.send('signup', { firstName });
 
   return { userId, tokens: { accessToken, refreshToken } };
 };
