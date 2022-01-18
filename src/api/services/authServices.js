@@ -2,6 +2,7 @@ const UserRepo = require('../repositories/userRepository');
 const RefreshTokenRepo = require('../repositories/refreshTokenRepository');
 const UserServices = require('./userServices');
 const AppError = require('../../utils/appError');
+const Email = require('../../utils/email');
 const { findRoleID } = require('../../utils/auth');
 const {
   hashPassword,
@@ -55,6 +56,12 @@ exports.signup = async ({
     expirationDate: Date.now() + refTokenExpiresIn * 1000,
     userId,
   });
+
+  const mail = new Email(
+    email,
+    'You have successfully signed up on Booking API.'
+  );
+  await mail.send('signup', { firstName });
 
   return { userId, tokens: { accessToken, refreshToken } };
 };
