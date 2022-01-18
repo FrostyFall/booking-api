@@ -15,3 +15,8 @@ exports.loginSchema = object.keys({
   email: string.email().required(),
   password: string.min(8).max(32).required(),
 });
+
+exports.tokenSchema = object.keys({
+  email: string.email().required(),
+  refreshToken: string.min(12).required(),
+});

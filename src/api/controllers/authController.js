@@ -15,7 +15,7 @@ exports.signup = catchAsync(async (req, res) => {
     role,
   });
 
-  res.status(201).json(new Response(null, result));
+  res.status(201).json(new Response('User has been signed up', result));
 });
 
 exports.login = catchAsync(async (req, res) => {
@@ -24,4 +24,12 @@ exports.login = catchAsync(async (req, res) => {
   const result = await AuthServices.login({ email, password });
 
   res.status(201).json(new Response('User has been logged in', result));
+});
+
+exports.token = catchAsync(async (req, res) => {
+  const { email, refreshToken } = req.body;
+
+  const result = await AuthServices.token({ email, refreshToken });
+
+  res.status(201).json(new Response('Access token has been provided', result));
 });

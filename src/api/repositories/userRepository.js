@@ -54,7 +54,7 @@ exports.createOne = async ({
   });
 
   return {
-    userID: user.id,
+    userId: user.id,
   };
 };
 

@@ -3,6 +3,7 @@ const HotelReviewRepo = require('../repositories/hotelReviewRepository');
 const BookedRoomRepo = require('../repositories/bookedRoomRepository');
 const UsersRolesRepo = require('../repositories/usersRolesRepository');
 const UserInfoRepo = require('../repositories/userInfoRepository');
+const RefreshTokenRepo = require('../repositories/refreshTokenRepository');
 const AppError = require('../../utils/appError');
 const db = require('../../config/DBConnection');
 const pagination = require('../../utils/pagination');
@@ -34,6 +35,7 @@ exports.deleteSelf = async ({ userId, authUserId }) => {
     await UsersRolesRepo.transactionDeleteByUserId({ userId, t });
     await HotelReviewRepo.transactionDeleteByUserId({ userId, t });
     await BookedRoomRepo.transactionDeleteByUserId({ userId, t });
+    await RefreshTokenRepo.transactionDeleteByUserId({ userId, t });
 
     await t.commit();
   } catch (error) {
