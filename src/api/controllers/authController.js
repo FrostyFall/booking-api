@@ -31,5 +31,13 @@ exports.token = catchAsync(async (req, res) => {
 
   const result = await AuthServices.token({ email, refreshToken });
 
-  res.status(201).json(new Response('Access token has been provided', result));
+  res.status(200).json(new Response('Access token has been provided', result));
+});
+
+exports.disableToken = catchAsync(async (req, res) => {
+  const { refreshToken } = req.body;
+
+  const result = await AuthServices.disableToken(refreshToken);
+
+  res.status(200).json(new Response('Refresh token has been disabled', result));
 });

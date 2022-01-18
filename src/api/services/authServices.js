@@ -117,3 +117,13 @@ exports.token = async ({ email, refreshToken }) => {
 
   return { token: accessToken };
 };
+
+exports.disableToken = async (refreshToken) => {
+  if (!(await RefreshTokenRepo.findByStr(refreshToken))) {
+    throw new AppError('Provided refresh token is not valid', 400);
+  }
+
+  await RefreshTokenRepo.deleteByStr(refreshToken);
+
+  return null;
+};

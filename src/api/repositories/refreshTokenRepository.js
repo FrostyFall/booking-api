@@ -19,6 +19,14 @@ exports.findByStr = async (str) => {
   return result;
 };
 
+exports.deleteByStr = async (str) => {
+  const result = await RefreshToken.destroy({
+    where: { str },
+  });
+
+  return result;
+};
+
 exports.transactionDeleteByUserId = async ({ userId, t }) => {
   const result = await RefreshToken.destroy({
     where: {
