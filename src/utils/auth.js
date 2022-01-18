@@ -16,14 +16,14 @@ exports.isValidPassword = async (password, hashedPassword) => {
   return isValid;
 };
 
-exports.signToken = async (userId) => {
+exports.signToken = async ({ expiresIn, userId }) => {
   const secsSinceUnixEpoch = Math.floor(Date.now() / 1000);
-  const expiresIn = parseInt(process.env.JWT_EXPIRES_IN, 10);
+  const expiresInNum = parseInt(expiresIn, 10);
 
   const payload = {
     sub: userId,
     iat: secsSinceUnixEpoch,
-    exp: secsSinceUnixEpoch + expiresIn,
+    exp: secsSinceUnixEpoch + expiresInNum,
   };
 
   return new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ exports.signToken = async (userId) => {
 
       resolve({
         str: token,
-        expiresIn,
+        expiresIn: expiresInNum,
       });
     });
   });
