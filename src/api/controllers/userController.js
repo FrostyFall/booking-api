@@ -43,3 +43,12 @@ exports.updatePassword = catchAsync(async (req, res) => {
 
   res.status(200).json(new Response('Your password has been updated'));
 });
+
+exports.updateUserPassword = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  await UserServices.updateUserPassword({ userId: id, newPassword });
+
+  res.status(200).json(new Response("User's password has been updated"));
+});

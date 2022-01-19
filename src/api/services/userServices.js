@@ -10,14 +10,27 @@ const { hashPassword, isValidPassword } = require('../../utils/auth');
 const db = require('../../config/DBConnection');
 const pagination = require('../../utils/pagination');
 
+exports.updateUserPassword = async ({ userId, newPassword }) => {
+  const user = await this.getUserById(userId);
+
+  if (!user) {
+    throw new AppError("Specified user doesn't exist", 400);
+  }
+
+  const newHashedPassword = await hashPassword(newPassword);
+  user.password = newHashedPassword;
+
+  await user.save();
+};
+
 exports.updatePassword = async ({ user, currentPassword, newPassword }) => {
   if (!(await isValidPassword(currentPassword, user.password))) {
     throw new AppError('Password is incorrect', 400);
   }
 
   const currentUser = user;
-  const newHashPassword = await hashPassword(newPassword);
-  currentUser.password = newHashPassword;
+  const newHashedPassword = await hashPassword(newPassword);
+  currentUser.password = newHashedPassword;
 
   await currentUser.save();
 };

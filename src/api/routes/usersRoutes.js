@@ -2,7 +2,8 @@ const express = require('express');
 const controller = require('../controllers/userController');
 const authorize = require('../middlewares/authorize');
 const validate = require('../middlewares/validate');
-const { updatePassword } = require('../validation').usersSchemas;
+const { updatePassword, updateUserPassword } =
+  require('../validation').usersSchemas;
 
 const router = express.Router();
 
@@ -14,6 +15,14 @@ router
     authorize('admin', 'user'),
     validate(updatePassword),
     controller.updatePassword
+  );
+
+router
+  .route('/:id/update-password')
+  .patch(
+    authorize('admin'),
+    validate(updateUserPassword),
+    controller.updateUserPassword
   );
 
 router.route('/:id').delete(authorize('admin', 'user'), controller.deleteSelf);
