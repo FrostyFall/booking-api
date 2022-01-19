@@ -4,7 +4,7 @@ const UserRolesServices = require('../api/services/roleServices');
 const AppError = require('./appError');
 
 exports.hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(12);
+  const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
   return hash;

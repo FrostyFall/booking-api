@@ -1,5 +1,11 @@
 const { UserInfo } = require('../models');
 
+exports.updateByUserId = async ({ userId, newInfo }) => {
+  const result = await UserInfo.update(newInfo, { where: { user_id: userId } });
+
+  return result;
+};
+
 exports.findByUserId = async (userId) => {
   const result = await UserInfo.findOne({
     where: { user_id: userId },

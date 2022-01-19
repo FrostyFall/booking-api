@@ -6,8 +6,59 @@ const UserInfoRepo = require('../repositories/userInfoRepository');
 const RefreshTokenRepo = require('../repositories/refreshTokenRepository');
 const AppError = require('../../utils/appError');
 const Email = require('../../utils/email');
+const { hashPassword, isValidPassword } = require('../../utils/auth');
 const db = require('../../config/DBConnection');
 const pagination = require('../../utils/pagination');
+
+exports.updateInfo = async ({ user, requestedUserId, info }) => {
+  if (isNaN(requestedUserId)) {
+    throw new AppError('Invalid user id', 400);
+  }
+
+  const parsedRequestedUserId = parseInt(requestedUserId, 10);
+
+  if (user.role !== 'admin' && user.id !== parsedRequestedUserId) {
+    throw new AppError('You have no permission to perform this action', 401);
+  }
+
+  if (!(await this.getUserById(parsedRequestedUserId))) {
+    throw new AppError("Specified user doesn't exist", 400);
+  }
+
+  const newInfo = {};
+  for (const property in info) {
+    if (info[property] !== undefined) {
+      newInfo[property] = info[property];
+    }
+  }
+
+  await UserInfoRepo.updateByUserId({ userId: parsedRequestedUserId, newInfo });
+};
+
+exports.updateUserPassword = async ({ userId, newPassword }) => {
+  const user = await this.getUserById(userId);
+
+  if (!user) {
+    throw new AppError("Specified user doesn't exist", 400);
+  }
+
+  const newHashedPassword = await hashPassword(newPassword);
+  user.password = newHashedPassword;
+
+  await user.save();
+};
+
+exports.updatePassword = async ({ user, currentPassword, newPassword }) => {
+  if (!(await isValidPassword(currentPassword, user.password))) {
+    throw new AppError('Password is incorrect', 400);
+  }
+
+  const currentUser = user;
+  const newHashedPassword = await hashPassword(newPassword);
+  currentUser.password = newHashedPassword;
+
+  await currentUser.save();
+};
 
 exports.getUsers = async ({ page, amount }) => {
   const options = pagination({ page, amount });
@@ -51,7 +102,7 @@ exports.deleteSelf = async ({ userId, authUserId }) => {
     user.email,
     'Your account has been successfully deleted on Booking API.'
   );
-  await mail.send('delete', { firstName: userInfo.first_name });
+  mail.send('delete', { firstName: userInfo.first_name });
 
   return result;
 };

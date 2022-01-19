@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
       return next(new AppError(info.message, 400));
     }
 
-    req.user = user.dataValues;
+    req.user = user;
 
     next();
   })(req, res, next);
