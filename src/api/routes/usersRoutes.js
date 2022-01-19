@@ -2,7 +2,7 @@ const express = require('express');
 const controller = require('../controllers/userController');
 const authorize = require('../middlewares/authorize');
 const validate = require('../middlewares/validate');
-const { updatePassword, updateUserPassword } =
+const { updatePassword, updateUserPassword, updateInfo } =
   require('../validation').usersSchemas;
 
 const router = express.Router();
@@ -10,7 +10,7 @@ const router = express.Router();
 router.route('/').get(authorize('admin'), controller.getUsers);
 
 router
-  .route('/update-password')
+  .route('/change-password')
   .patch(
     authorize('admin', 'user'),
     validate(updatePassword),
@@ -18,14 +18,21 @@ router
   );
 
 router
-  .route('/:id/update-password')
+  .route('/:id/change-password')
   .patch(
     authorize('admin'),
     validate(updateUserPassword),
     controller.updateUserPassword
   );
 
-router.route('/:id').delete(authorize('admin', 'user'), controller.deleteSelf);
+router
+  .route('/:id')
+  .patch(
+    authorize('admin', 'user'),
+    validate(updateInfo),
+    controller.updateInfo
+  )
+  .delete(authorize('admin', 'user'), controller.deleteSelf);
 
 router
   .route('/:id/booked-rooms')
