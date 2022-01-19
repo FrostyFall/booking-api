@@ -6,8 +6,21 @@ const UserInfoRepo = require('../repositories/userInfoRepository');
 const RefreshTokenRepo = require('../repositories/refreshTokenRepository');
 const AppError = require('../../utils/appError');
 const Email = require('../../utils/email');
+const { hashPassword, isValidPassword } = require('../../utils/auth');
 const db = require('../../config/DBConnection');
 const pagination = require('../../utils/pagination');
+
+exports.updatePassword = async ({ user, currentPassword, newPassword }) => {
+  if (!(await isValidPassword(currentPassword, user.password))) {
+    throw new AppError('Password is incorrect', 400);
+  }
+
+  const currentUser = user;
+  const newHashPassword = await hashPassword(newPassword);
+  currentUser.password = newHashPassword;
+
+  await currentUser.save();
+};
 
 exports.getUsers = async ({ page, amount }) => {
   const options = pagination({ page, amount });

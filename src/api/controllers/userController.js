@@ -31,3 +31,15 @@ exports.getUserBookings = catchAsync(async (req, res) => {
 
   res.status(200).json(new Response(null, fetchedUserBookings));
 });
+
+exports.updatePassword = catchAsync(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  await UserServices.updatePassword({
+    user: req.user,
+    currentPassword,
+    newPassword,
+  });
+
+  res.status(200).json(new Response('Your password has been updated'));
+});
