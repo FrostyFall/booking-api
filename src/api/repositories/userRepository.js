@@ -1,7 +1,11 @@
 const { User, UserInfo, UsersRoles } = require('../models');
 
 exports.findAll = async ({ limit, offset }) => {
-  const result = await User.findAll({ limit, offset });
+  const result = await User.findAll({
+    limit,
+    offset,
+    attributes: ['id', 'email', 'password', 'created_at', 'deleted_at'],
+  });
 
   return result;
 };
@@ -11,6 +15,7 @@ exports.findById = async (id) => {
     where: {
       id,
     },
+    attributes: ['id', 'email', 'password', 'created_at', 'deleted_at'],
   });
 
   return result;
@@ -21,6 +26,7 @@ exports.findByEmail = async (email) => {
     where: {
       email,
     },
+    attributes: ['id', 'email', 'password', 'created_at', 'deleted_at'],
   });
 
   return result;
@@ -48,7 +54,7 @@ exports.createOne = async ({
   });
 
   return {
-    userID: user.id,
+    userId: user.id,
   };
 };
 

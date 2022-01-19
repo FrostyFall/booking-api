@@ -5,13 +5,16 @@ exports.findById = async (id) => {
     where: {
       id,
     },
+    attributes: ['id', 'role', 'created_at', 'deleted_at'],
   });
 
   return result;
 };
 
 exports.findAll = async () => {
-  const result = await Role.findAll();
+  const result = await Role.findAll({
+    attributes: ['id', 'role', 'created_at', 'deleted_at'],
+  });
 
   return result;
 };

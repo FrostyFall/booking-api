@@ -24,6 +24,16 @@ exports.findActiveOrCancelledRooms = async (roomId) => {
         },
       ],
     },
+    attributes: [
+      'id',
+      'move_in_date',
+      'leave_date',
+      'is_cancelled',
+      'created_at',
+      'deleted_at',
+      'room_id',
+      'user_id',
+    ],
   });
 
   return result;
@@ -34,6 +44,16 @@ exports.findByRoomId = async (roomID) => {
     where: {
       room_id: roomID,
     },
+    attributes: [
+      'id',
+      'move_in_date',
+      'leave_date',
+      'is_cancelled',
+      'created_at',
+      'deleted_at',
+      'room_id',
+      'user_id',
+    ],
   });
 
   return result;
@@ -44,13 +64,36 @@ exports.findByUserId = async (userID) => {
     where: {
       user_id: userID,
     },
+    attributes: [
+      'id',
+      'move_in_date',
+      'leave_date',
+      'is_cancelled',
+      'created_at',
+      'deleted_at',
+      'room_id',
+      'user_id',
+    ],
   });
 
   return result;
 };
 
 exports.findAll = async ({ limit, offset }) => {
-  const result = await BookedRoom.findAll({ limit, offset });
+  const result = await BookedRoom.findAll({
+    limit,
+    offset,
+    attributes: [
+      'id',
+      'move_in_date',
+      'leave_date',
+      'is_cancelled',
+      'created_at',
+      'deleted_at',
+      'room_id',
+      'user_id',
+    ],
+  });
 
   return result;
 };
@@ -81,6 +124,16 @@ exports.findById = async (id) => {
     where: {
       id,
     },
+    attributes: [
+      'id',
+      'move_in_date',
+      'leave_date',
+      'is_cancelled',
+      'created_at',
+      'deleted_at',
+      'room_id',
+      'user_id',
+    ],
   });
 
   return result;

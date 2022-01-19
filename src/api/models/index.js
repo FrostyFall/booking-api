@@ -38,7 +38,17 @@ const {
   UserInfo,
   Role,
   UsersRoles,
+  RefreshToken,
 } = db;
+
+User.hasMany(RefreshToken, {
+  foreignKey: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    name: 'user_id',
+  },
+  sourceKey: 'id',
+});
 
 User.hasMany(HotelReview, {
   foreignKey: {

@@ -31,3 +31,37 @@ exports.getUserBookings = catchAsync(async (req, res) => {
 
   res.status(200).json(new Response(null, fetchedUserBookings));
 });
+
+exports.updatePassword = catchAsync(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  await UserServices.updatePassword({
+    user: req.user,
+    currentPassword,
+    newPassword,
+  });
+
+  res.status(200).json(new Response('Your password has been updated'));
+});
+
+exports.updateUserPassword = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  await UserServices.updateUserPassword({ userId: id, newPassword });
+
+  res.status(200).json(new Response("User's password has been updated"));
+});
+
+exports.updateInfo = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { newFirstName, newLastName } = req.body;
+
+  await UserServices.updateInfo({
+    user: req.user,
+    requestedUserId: id,
+    data: { first_name: newFirstName, last_name: newLastName },
+  });
+
+  res.status(200).json(new Response('Provided data has been updated'));
+});

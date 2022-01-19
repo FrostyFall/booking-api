@@ -9,7 +9,7 @@ exports.getRoomBookings = async (roomID) => {
 };
 
 exports.getUserBookings = async ({ targetUserID, userID, userRole }) => {
-  if (!(await UserServices.getUserById(targetUserID)).user) {
+  if (!(await UserServices.getUserById(targetUserID))) {
     throw new AppError('Specified user not found', 400);
   }
 

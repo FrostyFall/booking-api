@@ -4,7 +4,7 @@ const UserRolesServices = require('../api/services/roleServices');
 const AppError = require('./appError');
 
 exports.hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(12);
+  const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
   return hash;
@@ -16,14 +16,14 @@ exports.isValidPassword = async (password, hashedPassword) => {
   return isValid;
 };
 
-exports.signToken = async (userId) => {
+exports.signToken = async ({ expiresIn, userId }) => {
   const secsSinceUnixEpoch = Math.floor(Date.now() / 1000);
-  const expiresIn = parseInt(process.env.JWT_EXPIRES_IN, 10);
+  const expiresInNum = parseInt(expiresIn, 10);
 
   const payload = {
     sub: userId,
     iat: secsSinceUnixEpoch,
-    exp: secsSinceUnixEpoch + expiresIn,
+    exp: secsSinceUnixEpoch + expiresInNum,
   };
 
   return new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ exports.signToken = async (userId) => {
 
       resolve({
         str: token,
-        expiresIn,
+        expiresIn: expiresInNum,
       });
     });
   });

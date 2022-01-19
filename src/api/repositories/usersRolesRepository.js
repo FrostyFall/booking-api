@@ -5,6 +5,7 @@ exports.findByUserId = async (id) => {
     where: {
       user_id: id,
     },
+    attributes: ['id', 'created_at', 'deleted_at', 'user_id', 'role_id'],
   });
 
   return result;

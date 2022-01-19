@@ -40,6 +40,15 @@ exports.findByHotelId = async ({ hotelID, limit, offset }) => {
     },
     limit,
     offset,
+    attributes: [
+      'id',
+      'review',
+      'rating',
+      'created_at',
+      'deleted_at',
+      'user_id',
+      'hotel_id',
+    ],
   });
 
   return result;

@@ -19,12 +19,14 @@ passport.use(
       const user = await UsersRepo.findById(userId);
 
       if (!user) {
-        return done(null, false);
+        return done(new AppError('Authentication failed', 400));
       }
 
       return done(null, user);
     } catch (err) {
-      return done(new AppError('Error occured while fetching the user', 500));
+      return done(
+        new AppError('Error occured while trying to authenticate the user', 500)
+      );
     }
   })
 );
