@@ -60,10 +60,17 @@ exports.updatePassword = async ({ user, currentPassword, newPassword }) => {
   await currentUser.save();
 };
 
-exports.getUsers = async ({ page, amount }) => {
-  const options = pagination({ page, amount });
+exports.getUsers = async (infoOptions, paginationOptions) => {
+  const newPaginationOptions = pagination(paginationOptions);
+  const newInfoOptions = {};
 
-  const users = await UserRepo.findAll(options);
+  for (const property in infoOptions) {
+    if (infoOptions[property] !== undefined) {
+      newInfoOptions[property] = infoOptions[property];
+    }
+  }
+
+  const users = await UserRepo.findAll(newInfoOptions, newPaginationOptions);
 
   return { users };
 };
@@ -98,11 +105,11 @@ exports.deleteSelf = async ({ userId, authUserId }) => {
     throw new AppError('Error occured while deleting the room', 500);
   }
 
-  const mail = new Email(
+  const notification = new Email(
     user.email,
     'Your account has been successfully deleted on Booking API.'
   );
-  mail.send('delete', { firstName: userInfo.first_name });
+  notification.send('account_delete', { firstName: userInfo.first_name });
 
   return result;
 };
