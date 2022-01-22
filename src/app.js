@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./utils/cronJobs');
 const express = require('express');
 const passport = require('./config/passport');
 const db = require('./config/DBConnection');
