@@ -4,8 +4,11 @@ const Response = require('../../utils/response');
 const catchAsync = require('../../utils/catchAsync');
 
 exports.getUsers = catchAsync(async (req, res) => {
-  const { page, amount } = req.query;
-  const fetchedUsers = await UserServices.getUsers({ page, amount });
+  const { page, amount, first_name, last_name } = req.query;
+  const fetchedUsers = await UserServices.getUsers(
+    { first_name, last_name },
+    { page, amount }
+  );
 
   res.status(200).json(new Response(null, fetchedUsers));
 });
