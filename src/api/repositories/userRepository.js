@@ -1,10 +1,19 @@
+const { QueryTypes } = require('sequelize');
 const { User, UserInfo, UsersRoles } = require('../models');
+const sequelize = require('../../config/DBConnection');
 
-exports.findAll = async ({ limit, offset }) => {
-  const result = await User.findAll({
-    limit,
-    offset,
-    attributes: ['id', 'email', 'password', 'created_at', 'deleted_at'],
+exports.findAll = async (infoOptions, { limit, offset }) => {
+  let infoDetailsStr = '';
+  for (const [key, value] of Object.entries(infoOptions)) {
+    infoDetailsStr += ` AND uinf.${key} = '${value}'`;
+  }
+
+  const queryStr = `SELECT users.id, users.email, users.password, users.created_at, uinf.first_name, uinf.last_name FROM user_info AS uinf INNER JOIN users ON users.deleted_at IS NULL AND uinf.user_id = users.id${infoDetailsStr}${
+    limit !== undefined ? ` LIMIT ${limit} OFFSET ${offset};` : ';'
+  }`;
+
+  const result = await sequelize.query(queryStr, {
+    type: QueryTypes.SELECT,
   });
 
   return result;

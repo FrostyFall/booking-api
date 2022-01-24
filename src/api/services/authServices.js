@@ -57,11 +57,11 @@ exports.signup = async ({
     userId,
   });
 
-  const mail = new Email(
+  const notification = new Email(
     email,
     'You have successfully signed up on Booking API.'
   );
-  mail.send('signup', { firstName });
+  notification.send('account_signup', { firstName });
 
   return { userId, tokens: { accessToken, refreshToken } };
 };

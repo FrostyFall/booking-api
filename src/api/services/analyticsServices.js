@@ -79,7 +79,6 @@ exports.getUsersWithMostBookings = async () => {
     return null;
   }
 
-  // FIXME: ADD DELETED_AT IS NULL TO BOTH TABLES
   const requiredUsers = await sequelize.query(
     'SELECT users.id, users.email, users.password, users.created_at, users.deleted_at, COUNT(bks.user_id) AS total_booked_rooms FROM users INNER JOIN booked_rooms AS bks ON users.id = bks.user_id AND users.id IN (:ids) GROUP BY user_id ORDER BY total_booked_rooms DESC;',
     {
